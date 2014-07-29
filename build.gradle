@@ -12,10 +12,15 @@ repositories {
 }
 
 dependencies {
+    compile "com.google.code.gson:gson:2.2.4"
 }
 
 uploadArchives {
     repositories {
         mavenLocal()
     }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.0'
 }
