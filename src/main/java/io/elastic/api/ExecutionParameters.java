@@ -1,15 +1,14 @@
 package io.elastic.api;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public final class ExecutionParameters {
 
     private final Message message;
     private final JsonObject configuration;
-    private final JsonElement snapshot;
+    private final JsonObject snapshot;
 
-    private ExecutionParameters(Message message, JsonObject configuration, JsonElement snapshot) {
+    private ExecutionParameters(Message message, JsonObject configuration, JsonObject snapshot) {
         this.message = message;
         this.configuration = configuration;
         this.snapshot = snapshot;
@@ -23,14 +22,14 @@ public final class ExecutionParameters {
         return configuration;
     }
 
-    public JsonElement getSnapshot() {
+    public JsonObject getSnapshot() {
         return snapshot;
     }
 
     public static final class Builder {
         private final Message message;
         private JsonObject configuration;
-        private JsonElement snapshot;
+        private JsonObject snapshot;
 
 
         public Builder(Message message) {
@@ -49,7 +48,7 @@ public final class ExecutionParameters {
             return this;
         }
 
-        public Builder snapshot(JsonElement snapshot) {
+        public Builder snapshot(JsonObject snapshot) {
             this.snapshot = snapshot;
 
             return this;
