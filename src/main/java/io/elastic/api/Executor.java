@@ -3,8 +3,8 @@ package io.elastic.api;
 import java.lang.reflect.Constructor;
 
 /**
- * Executes a Java component and passes the execution results to its
- * callee using given {@link Callback}s.
+ * Executes a Java component and emit the execution results to its
+ * callee using given {@link EventEmitter}.
  */
 public final class Executor {
 
