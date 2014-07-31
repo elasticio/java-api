@@ -1,5 +1,6 @@
 package io.elastic.api;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.lang.reflect.Constructor;
@@ -12,10 +13,10 @@ public final class Executor {
 
     private String componentClassName;
     private JsonObject config;
-    private JsonObject snapshot;
+    private JsonElement snapshot;
     private EventEmitter eventEmitter;
 
-    public Executor(String componentClassName, JsonObject config, JsonObject snapshot, EventEmitter eventEmitter) {
+    public Executor(String componentClassName, JsonObject config, JsonElement snapshot, EventEmitter eventEmitter) {
         this.componentClassName = componentClassName;
         this.config = config;
         this.snapshot = snapshot;

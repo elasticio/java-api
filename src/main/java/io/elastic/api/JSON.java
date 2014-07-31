@@ -12,7 +12,7 @@ public final class JSON {
 
     }
 
-    public static JsonObject parse(String input) {
+    public static JsonObject parseJsonObject(String input) {
         if (input == null) {
             return null;
         }
@@ -21,10 +21,23 @@ public final class JSON {
 
         final JsonElement json = gson.fromJson(input, (Type) JsonObject.class);
 
+
         if (!json.isJsonObject()) {
-            throw new IllegalArgumentException(String.format("'%s' cannot be parsed to a JsonObject", input));
+            throw new IllegalArgumentException(String.format("%s cannot be parsed to a JsonObject", input));
         }
 
-        return (JsonObject)json;
+        return (JsonObject) json;
+
+    }
+
+    public static JsonElement parseJsonElement(String input) {
+        if (input == null) {
+            return null;
+        }
+
+        final Gson gson = new Gson();
+
+        return gson.toJsonTree(input);
+
     }
 }

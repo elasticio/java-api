@@ -1,5 +1,6 @@
 package io.elastic.api;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class NoOpComponent extends Component {
@@ -11,9 +12,9 @@ public class NoOpComponent extends Component {
     }
 
     @Override
-    protected void process(Message message, JsonObject config, JsonObject snapshot) {
+    protected void process(Message message, JsonObject config, JsonElement snapshot) {
 
-        System.err.println("Processing message: "+message);
+        System.err.println("Processing message: " + message);
         JsonObject body = new JsonObject();
         body.addProperty("message", "Hello, world!");
 

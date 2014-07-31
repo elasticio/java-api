@@ -1,5 +1,6 @@
 package io.elastic.api;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public abstract class Component {
@@ -10,7 +11,7 @@ public abstract class Component {
         this.eventEmitter = eventEmitter;
     }
 
-    abstract protected void process(Message message, JsonObject config, JsonObject snapshot);
+    abstract protected void process(Message message, JsonObject config, JsonElement snapshot);
 
     protected EventEmitter getEventEmitter() {
         return eventEmitter;
