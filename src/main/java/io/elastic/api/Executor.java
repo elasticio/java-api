@@ -31,7 +31,7 @@ public final class Executor {
         }
 
         try {
-            newComponent().process(parameters);
+            newComponent().execute(parameters);
         } catch (Exception e) {
 
             eventEmitter.emitException(e);

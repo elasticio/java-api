@@ -11,7 +11,7 @@ public class NoOpComponent extends Component {
     }
 
     @Override
-    protected void process(ExecutionParameters parameters) {
+    protected void execute(ExecutionParameters parameters) {
 
         System.err.println("Processing message: " + parameters.getMessage());
         JsonObject body = new JsonObject();

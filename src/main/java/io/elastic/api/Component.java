@@ -8,7 +8,7 @@ public abstract class Component {
         this.eventEmitter = eventEmitter;
     }
 
-    abstract protected void process(ExecutionParameters parameters);
+    abstract protected void execute(ExecutionParameters parameters);
 
     protected EventEmitter getEventEmitter() {
         return eventEmitter;
