@@ -105,14 +105,6 @@ public class Message implements Serializable {
          * @return Message
          */
         public Message build() {
-            if (this.body == null) {
-                throw new IllegalStateException("Body is required");
-            }
-
-            if (this.attachments == null) {
-                throw new IllegalStateException("Attachments is required");
-            }
-
             return new Message(this.body, this.attachments);
         }
 
