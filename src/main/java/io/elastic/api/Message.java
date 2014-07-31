@@ -62,14 +62,14 @@ public class Message implements Serializable {
     /**
      * Used to build {@link Message} instances.
      */
-    public static final class MessageBuilder {
+    public static final class Builder {
         private JsonObject body;
         private JsonObject attachments;
 
         /**
          * Default constructor.
          */
-        public MessageBuilder() {
+        public Builder() {
             this.body = new JsonObject();
             this.attachments = new JsonObject();
         }
@@ -80,7 +80,7 @@ public class Message implements Serializable {
          * @param body body for the message
          * @return same builder instance
          */
-        public MessageBuilder body(Object body) {
+        public Builder body(Object body) {
 
             this.body = parseJsonObject(body);
 
@@ -93,7 +93,7 @@ public class Message implements Serializable {
          * @param attachments attachments for the message
          * @return same builder instance
          */
-        public MessageBuilder attachments(Object attachments) {
+        public Builder attachments(Object attachments) {
             this.attachments = parseJsonObject(attachments);
 
             return this;
@@ -116,12 +116,12 @@ public class Message implements Serializable {
             return new Message(this.body, this.attachments);
         }
 
-        private  JsonObject parseJsonObject(Object body) {
+        private JsonObject parseJsonObject(Object body) {
             final Gson gson = new Gson();
             JsonElement json;
 
             if (body instanceof String) {
-                json = gson.fromJson(body.toString(), (Type)JsonObject.class);
+                json = gson.fromJson(body.toString(), (Type) JsonObject.class);
             } else {
                 json = gson.toJsonTree(body);
             }
@@ -130,7 +130,7 @@ public class Message implements Serializable {
                 throw new IllegalArgumentException(String.format("'%s' cannot be parsed to a JsonObject", body));
             }
 
-            return (JsonObject)json;
+            return (JsonObject) json;
         }
 
     }
