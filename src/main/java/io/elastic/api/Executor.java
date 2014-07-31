@@ -1,8 +1,5 @@
 package io.elastic.api;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
 import java.lang.reflect.Constructor;
 
 /**
@@ -12,33 +9,29 @@ import java.lang.reflect.Constructor;
 public final class Executor {
 
     private String componentClassName;
-    private JsonObject config;
-    private JsonElement snapshot;
     private EventEmitter eventEmitter;
 
-    public Executor(String componentClassName, JsonObject config, JsonElement snapshot, EventEmitter eventEmitter) {
+    public Executor(String componentClassName, EventEmitter eventEmitter) {
         this.componentClassName = componentClassName;
-        this.config = config;
-        this.snapshot = snapshot;
         this.eventEmitter = eventEmitter;
     }
 
     /**
      * Executes for given message.
      *
-     * @param message message to process.
+     * @param parameters parameters to execute a component with.
      */
-    public void execute(Message message) {
+    public void execute(ExecutionParameters parameters) {
 
-        if (message == null) {
+        if (parameters == null) {
             eventEmitter.emitException(new IllegalArgumentException(
-                    "Message is required. Please pass a message to Executor.execute(msg)"));
+                    "ExecutionParameters is required. Please pass a parameters object to Executor.execute(parameters)"));
 
             return;
         }
 
         try {
-            newComponent().process(message, config, snapshot);
+            newComponent().process(parameters);
         } catch (Exception e) {
 
             eventEmitter.emitException(e);
