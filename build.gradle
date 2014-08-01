@@ -6,7 +6,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'bintray'
 
 group = 'io.elastic'
-version = '0.0.1'
+version = '0.0.1-SNAPSHOT'
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
