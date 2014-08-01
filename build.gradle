@@ -2,12 +2,23 @@ apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'idea'
 apply plugin: 'java-library-distribution'
+apply plugin: 'maven-publish'
+apply plugin: 'bintray'
 
 group = 'io.elastic'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.3'
+    }
+}
 
 repositories {
     mavenCentral()
@@ -22,6 +33,26 @@ dependencies {
 uploadArchives {
     repositories {
         mavenLocal()
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+bintray {
+    user = bintrayUser //this usually comes form gradle.properties file in ~/.gradle
+    key = bintrayKey //this usually comes form gradle.properties file in ~/.gradle
+    publications = ['mavenJava'] // see publications closure
+    pkg { //package will be created if does not exist
+        repo = 'maven'
+//            userOrg = 'myorg' // an optional organization name when the repo belongs to one of the user's orgs
+        name = 'java-api'
+        licenses = ['Apache-2.0']
     }
 }
 
