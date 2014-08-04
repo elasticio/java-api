@@ -1,5 +1,7 @@
 package io.elastic.api;
 
+import com.google.gson.JsonObject;
+
 public final class EventEmitter {
 
     private Callback errorCallback;
@@ -22,7 +24,7 @@ public final class EventEmitter {
         return emit(dataCallback, message);
     }
 
-    public EventEmitter emitSnapshot(Object snapshot) {
+    public EventEmitter emitSnapshot(JsonObject snapshot) {
 
         return emit(snapshotCallback, snapshot);
     }
@@ -36,7 +38,6 @@ public final class EventEmitter {
     /**
      * This interface defines a callback to be used by {@link Executor}
      * to pass errors, data and snapshots to its callee.
-     *
      */
     public interface Callback {
 
