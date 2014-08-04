@@ -13,7 +13,7 @@ public class NoOpComponent extends Component {
     @Override
     protected void execute(ExecutionParameters parameters) {
 
-        System.err.println("Processing message: " + parameters.getMessage());
+        System.err.println("Processing message: " + parameters);
 
         final JsonObject snapshot = new JsonObject();
         snapshot.add("echo", parameters.getSnapshot());

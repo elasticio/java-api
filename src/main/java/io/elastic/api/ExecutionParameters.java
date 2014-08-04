@@ -2,7 +2,11 @@ package io.elastic.api;
 
 import com.google.gson.JsonObject;
 
-public final class ExecutionParameters {
+import java.io.Serializable;
+
+public final class ExecutionParameters implements Serializable {
+
+    public static final long serialVersionUID = 1L;
 
     private final Message message;
     private final JsonObject configuration;
@@ -65,5 +69,14 @@ public final class ExecutionParameters {
 
             return new ExecutionParameters(message, configuration, snapshot);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "ExecutionParameters{" +
+                "message=" + message +
+                ", configuration=" + configuration +
+                ", snapshot=" + snapshot +
+                '}';
     }
 }
