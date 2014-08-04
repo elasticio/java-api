@@ -82,9 +82,9 @@ public class Message implements Serializable {
          * @param body body for the message
          * @return same builder instance
          */
-        public Builder body(Object body) {
+        public Builder body(JsonObject body) {
 
-            this.body = parseJsonObject(body);
+            this.body = body;
 
             return this;
         }
@@ -95,8 +95,8 @@ public class Message implements Serializable {
          * @param attachments attachments for the message
          * @return same builder instance
          */
-        public Builder attachments(Object attachments) {
-            this.attachments = parseJsonObject(attachments);
+        public Builder attachments(JsonObject attachments) {
+            this.attachments = attachments;
 
             return this;
         }
@@ -109,23 +109,5 @@ public class Message implements Serializable {
         public Message build() {
             return new Message(this.body, this.attachments);
         }
-
-        private JsonObject parseJsonObject(Object body) {
-            final Gson gson = new Gson();
-            JsonElement json;
-
-            if (body instanceof String) {
-                json = gson.fromJson(body.toString(), (Type) JsonObject.class);
-            } else {
-                json = gson.toJsonTree(body);
-            }
-
-            if (!json.isJsonObject()) {
-                throw new IllegalArgumentException(String.format("'%s' cannot be parsed to a JsonObject", body));
-            }
-
-            return (JsonObject) json;
-        }
-
     }
 }
