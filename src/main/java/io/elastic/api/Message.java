@@ -1,18 +1,16 @@
 package io.elastic.api;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.io.Serializable;
-import java.lang.reflect.Type;
 
 /**
  * Message to be processed by {@link Executor}.
  */
 public class Message implements Serializable {
 
-    public static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private JsonObject body;
     private JsonObject attachments;

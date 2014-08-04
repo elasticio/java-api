@@ -4,9 +4,13 @@ import com.google.gson.JsonObject;
 
 import java.io.Serializable;
 
+/**
+ * Represents parameters for a {@link Component} execution passed
+ * to {@link Executor#execute(ExecutionParameters)}.
+ */
 public final class ExecutionParameters implements Serializable {
 
-    public static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private final Message message;
     private final JsonObject configuration;
@@ -18,24 +22,47 @@ public final class ExecutionParameters implements Serializable {
         this.snapshot = snapshot;
     }
 
+    /**
+     * Returns {@link Message} for the component.
+     *
+     * @return message instance
+     */
     public Message getMessage() {
         return message;
     }
 
+    /**
+     * Returns component's configuration.
+     *
+     * @return json object representing component's configuration
+     */
     public JsonObject getConfiguration() {
         return configuration;
     }
 
+    /**
+     * Returns component's snapshot.
+     *
+     * @return json object representing component's snapshot
+     */
     public JsonObject getSnapshot() {
         return snapshot;
     }
 
+    /**
+     * Used to build {@link ExecutionParameters} instances.
+     */
     public static final class Builder {
         private final Message message;
         private JsonObject configuration;
         private JsonObject snapshot;
 
 
+        /**
+         * Creates a {@link Builder} instance.
+         *
+         * @param message non-null message for the component
+         */
         public Builder(Message message) {
             if (message == null) {
                 throw new IllegalArgumentException("Message is required");
@@ -46,18 +73,33 @@ public final class ExecutionParameters implements Serializable {
             this.snapshot = new JsonObject();
         }
 
+        /**
+         * Adds component's configuration.
+         *
+         * @param configuration component's configuration
+         * @return this instance
+         */
         public Builder configuration(JsonObject configuration) {
             this.configuration = configuration;
 
             return this;
         }
 
+        /**
+         * Adds component's snapshot.
+         *
+         * @param snapshot component's snapshot
+         * @return this instance
+         */
         public Builder snapshot(JsonObject snapshot) {
             this.snapshot = snapshot;
 
             return this;
         }
 
+        /**
+         * Builds a {@link ExecutionParameters} instance.
+         */
         public ExecutionParameters build() {
             if (this.configuration == null) {
                 throw new IllegalStateException("Configuration may not be null");

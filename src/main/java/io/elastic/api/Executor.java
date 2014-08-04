@@ -3,7 +3,7 @@ package io.elastic.api;
 import java.lang.reflect.Constructor;
 
 /**
- * Executes a Java component and emit the execution results to its
+ * Executes a {@link Component} and emits the execution results to its
  * callee using given {@link EventEmitter}.
  */
 public final class Executor {
@@ -11,13 +11,20 @@ public final class Executor {
     private String componentClassName;
     private EventEmitter eventEmitter;
 
+    /**
+     * Creates a new instance of {@link Executor} with given {@link Component}
+     * class name and {@link EventEmitter}.
+     *
+     * @param componentClassName fully qualified name of a component to execute
+     * @param eventEmitter       used to emit execution results
+     */
     public Executor(String componentClassName, EventEmitter eventEmitter) {
         this.componentClassName = componentClassName;
         this.eventEmitter = eventEmitter;
     }
 
     /**
-     * Executes for given message.
+     * Executes a component with given {@link ExecutionParameters}.
      *
      * @param parameters parameters to execute a component with.
      */

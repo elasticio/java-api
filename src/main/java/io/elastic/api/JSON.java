@@ -30,14 +30,15 @@ public final class JSON {
 
     }
 
-    public static JsonElement parseJsonElement(String input) {
-        if (input == null) {
-            return null;
-        }
-
+    public static JsonObject toJsonTree(Object input) {
         final Gson gson = new Gson();
 
-        return gson.toJsonTree(input);
+        final JsonElement json = gson.toJsonTree(input);
 
+        if (!json.isJsonObject()) {
+            throw new IllegalArgumentException(String.format("%s cannot be serialized into a JsonObject", input));
+        }
+
+        return (JsonObject) json;
     }
 }
