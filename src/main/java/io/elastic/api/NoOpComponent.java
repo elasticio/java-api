@@ -17,7 +17,11 @@ public class NoOpComponent extends Component {
         JsonObject body = new JsonObject();
         body.addProperty("message", "Hello, world!");
 
-        getEventEmitter().emitData(new Message.Builder().body(body).build());
+        final JsonObject snapshot = new JsonObject();
+        snapshot.addProperty("message", "I am a snapshot!");
 
+        getEventEmitter()
+                .emitSnapshot(snapshot)
+                .emitData(new Message.Builder().body(body).build());
     }
 }
