@@ -14,14 +14,26 @@ public class NoOpComponent extends Component {
     protected void execute(ExecutionParameters parameters) {
 
         System.err.println("Processing message: " + parameters.getMessage());
-        JsonObject body = new JsonObject();
-        body.addProperty("message", "Hello, world!");
 
         final JsonObject snapshot = new JsonObject();
-        snapshot.addProperty("message", "I am a snapshot!");
+        snapshot.add("echo", parameters.getSnapshot());
 
         getEventEmitter()
                 .emitSnapshot(snapshot)
-                .emitData(new Message.Builder().body(body).build());
+                .emitData(echoMessage(parameters));
+    }
+
+    private Message echoMessage(ExecutionParameters parameters) {
+
+        final Message msg = parameters.getMessage();
+
+        final JsonObject body = new JsonObject();
+        body.add("echo", msg.getBody());
+        body.add("config", parameters.getConfiguration());
+
+        return new Message.Builder()
+                .body(body)
+                .attachments(msg.getAttachments())
+                .build();
     }
 }
