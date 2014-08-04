@@ -30,7 +30,7 @@ public final class EventEmitter {
     }
 
     private EventEmitter emit(Callback callback, Object value) {
-        callback.receive(value.toString());
+        callback.receive(value);
 
         return this;
     }

@@ -23,7 +23,7 @@ class EventEmitterSpec extends Specification {
         emitter.emitSnapshot(snapshot);
 
         then:
-        1 * snapshotCallback.receive('{"value":"I am snapshot"}')
+        1 * snapshotCallback.receive(snapshot)
         0 * dataCallback.receive(_)
         0 * errorCallback.receive(_)
     }
