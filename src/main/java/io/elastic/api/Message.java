@@ -12,6 +12,8 @@ import java.lang.reflect.Type;
  */
 public class Message implements Serializable {
 
+    public static final long serialVersionUID = 1L;
+
     private JsonObject body;
     private JsonObject attachments;
 
