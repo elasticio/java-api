@@ -11,7 +11,7 @@ public class NoOpComponent extends Component {
     }
 
     @Override
-    protected void execute(ExecutionParameters parameters) {
+    public void execute(ExecutionParameters parameters) {
 
         System.err.println("Processing message: " + parameters);
 

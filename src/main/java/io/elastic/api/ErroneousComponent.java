@@ -1,14 +1,14 @@
-package io.elastic.api;
+    package io.elastic.api;
 
-public class ErroneousComponent extends Component {
+    public class ErroneousComponent extends Component {
 
-    public ErroneousComponent(EventEmitter eventEmitter) {
-        super(eventEmitter);
+        public ErroneousComponent(EventEmitter eventEmitter) {
+            super(eventEmitter);
+        }
+
+        @Override
+        public void execute(ExecutionParameters parameters) {
+
+            getEventEmitter().emitException(new IllegalStateException("Ouch"));
+        }
     }
-
-    @Override
-    protected void execute(ExecutionParameters parameters) {
-
-        getEventEmitter().emitException(new IllegalStateException("Ouch"));
-    }
-}
