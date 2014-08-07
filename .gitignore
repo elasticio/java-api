@@ -1,6 +1,9 @@
 *.DS_Store
 .gradle
+gradle.properties
 .idea
 build
 *.iml
+*.ipr
+*.iws
 out
