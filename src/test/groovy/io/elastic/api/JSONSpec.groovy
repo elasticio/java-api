@@ -7,7 +7,7 @@ class JSONSpec extends Specification {
 
     def "parse JSON object from #input results in #result"() {
         expect:
-        JSON.parseJsonObject(input) == result
+        JSON.parse(input) == result
 
         where:
         input << [null, "{}"]
@@ -16,7 +16,7 @@ class JSONSpec extends Specification {
 
     def "parsing a JSON array as JSON fails"() {
         when:
-        JSON.parseJsonObject("[]")
+        JSON.parse("[]")
 
         then:
         def e = thrown(IllegalArgumentException)

@@ -15,7 +15,13 @@ public final class JSON {
 
     }
 
-    public static JsonObject parseJsonObject(String input) {
+    /**
+     * Parses a String into a {@link JsonObject}.
+     *
+     * @param input string to parse
+     * @return JsonObject
+     */
+    public static JsonObject parse(String input) {
         if (input == null) {
             return null;
         }
