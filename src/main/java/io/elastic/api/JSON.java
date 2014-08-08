@@ -32,16 +32,4 @@ public final class JSON {
         return (JsonObject) json;
 
     }
-
-    public static JsonObject toJsonTree(Object input) {
-        final Gson gson = new Gson();
-
-        final JsonElement json = gson.toJsonTree(input);
-
-        if (!json.isJsonObject()) {
-            throw new IllegalArgumentException(String.format("%s cannot be serialized into a JsonObject", input));
-        }
-
-        return (JsonObject) json;
-    }
 }
