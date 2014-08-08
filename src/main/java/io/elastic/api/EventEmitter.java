@@ -16,7 +16,7 @@ public final class EventEmitter {
     private Callback dataCallback;
     private Callback snapshotCallback;
 
-    public EventEmitter(Callback errorCallback, Callback dataCallback, Callback snapshotCallback) {
+    private EventEmitter(Callback errorCallback, Callback dataCallback, Callback snapshotCallback) {
         this.errorCallback = errorCallback;
         this.dataCallback = dataCallback;
         this.snapshotCallback = snapshotCallback;
@@ -72,6 +72,74 @@ public final class EventEmitter {
          * @param data data to be passed
          */
         void receive(Object data);
+    }
+
+
+    /**
+     * Used to build {@link EventEmitter} instances.
+     */
+    public static final class Builder {
+        private Callback errorCallback;
+        private Callback dataCallback;
+        private Callback snapshotCallback;
+
+        public Builder() {
+
+        }
+
+        /**
+         * Adds 'error' {@link Callback}.
+         * @param callback callback invoked on error event
+         * @return this instance
+         */
+        public Builder onError(Callback callback) {
+            this.errorCallback = callback;
+
+            return this;
+        }
+
+        /**
+         * Adds 'data' {@link Callback}.
+         * @param callback callback invoked on data event
+         * @return this instance
+         */
+        public Builder onData(Callback callback) {
+            this.dataCallback = callback;
+
+            return this;
+        }
+
+        /**
+         * Adds 'snapshot' {@link Callback}.
+         * @param callback callback invoked on snapshot event
+         * @return this instance
+         */
+        public Builder onSnapshot(Callback callback) {
+            this.snapshotCallback = callback;
+
+            return this;
+        }
+
+        /**
+         * Builds an {@link EventEmitter} instance and returns it.
+         * @return EventEmitter
+         */
+        public EventEmitter build() {
+
+            if (this.errorCallback == null) {
+                throw new IllegalStateException("'onError' callback is required");
+            }
+
+            if (this.dataCallback == null) {
+                throw new IllegalStateException("'onData' callback is required");
+            }
+
+            if (this.snapshotCallback == null) {
+                throw new IllegalStateException("'onSnapshot' callback is required");
+            }
+
+            return new EventEmitter(errorCallback, dataCallback, snapshotCallback);
+        }
     }
 
 }
