@@ -6,6 +6,9 @@ import com.google.gson.JsonObject;
 
 import java.lang.reflect.Type;
 
+/**
+ * JSON utilities.
+ */
 public final class JSON {
 
     private JSON() {

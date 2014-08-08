@@ -2,6 +2,14 @@ package io.elastic.api;
 
 import com.google.gson.JsonObject;
 
+/**
+ * Used by a {@link Component} to communicate with the elastic.io runtime.
+ *
+ * The implementation of this class has been inspired by the
+ * <a href="http://nodejs.org/api/events.html" target="_blank">Node.js EventEmitter</a> class.
+ *
+ * @see Component
+ */
 public final class EventEmitter {
 
     private Callback errorCallback;
@@ -14,16 +22,33 @@ public final class EventEmitter {
         this.snapshotCallback = snapshotCallback;
     }
 
+    /**
+     * Emits an {@link Exception}.
+     *
+     * @param e exception to emit
+     * @return this instance
+     */
     public EventEmitter emitException(Exception e) {
 
         return emit(errorCallback, e);
     }
 
+    /**
+     * Emits a {@link Message}.
+     *
+     * @param message message to emit
+     * @return this instance
+     */
     public EventEmitter emitData(Message message) {
 
         return emit(dataCallback, message);
     }
 
+    /**
+     * Emits {@link JsonObject} snapshot.
+     * @param snapshot snapshot to emit
+     * @return this instance
+     */
     public EventEmitter emitSnapshot(JsonObject snapshot) {
 
         return emit(snapshotCallback, snapshot);
