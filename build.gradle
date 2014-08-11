@@ -36,10 +36,24 @@ uploadArchives {
     }
 }
 
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+}
+
+task javadocs(type: Javadoc) {
+    source = sourceSets.main.allJava
+    classpath = configurations.compile
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
+
+            artifact sourceJar {
+                classifier "sources"
+            }
         }
     }
 }
@@ -57,8 +71,6 @@ if (project.hasProperty('bintrayUser') && project.hasProperty('bintrayKey')) {
         }
     }
 }
-
-
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.0'

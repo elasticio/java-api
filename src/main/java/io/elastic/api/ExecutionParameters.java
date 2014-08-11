@@ -99,6 +99,8 @@ public final class ExecutionParameters implements Serializable {
 
         /**
          * Builds a {@link ExecutionParameters} instance.
+         *
+         * @return ExecutionParameters
          */
         public ExecutionParameters build() {
             if (this.configuration == null) {
