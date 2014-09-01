@@ -45,10 +45,16 @@ uploadArchives {
                 }
 
                 pom.project {
-                    name 'elastic.io Java API'
+                    name 'elasticio-java-api'
                     packaging 'jar'
                     description 'Java API for elastic.io'
                     url 'http://www.elastic.io'
+                    inceptionYear '2014'
+
+                    organization {
+                        name 'elastic.io GmbH'
+                        url 'http://www.elastic.io'
+                    }
 
                     scm {
                         url 'scm:git@github.com:elasticio/java-api.git'
@@ -61,6 +67,19 @@ uploadArchives {
                             name 'The Apache Software License, Version 2.0'
                             url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
                             distribution 'repo'
+                        }
+                    }
+
+                    issueManagement {
+                        system 'GitHub'
+                        url 'https://github.com/elasticio/java-api/issues'
+                    }
+
+                    developers {
+                        developer {
+                            id 'elasticio'
+                            name 'elastic.io GmbH'
+                            email 'support@elastic.io'
                         }
                     }
                 }
