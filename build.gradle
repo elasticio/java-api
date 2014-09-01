@@ -5,12 +5,20 @@ apply plugin: 'idea'
 apply plugin: 'java-library-distribution'
 apply plugin: 'maven-publish'
 apply plugin: 'bintray'
+apply plugin: 'maven'
+apply plugin: 'signing'
 
 group = 'io.elastic'
-version = '0.0.1'
+version = '0.0.2-SNAPSHOT'
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
+
+signing {
+    required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
+    sign configurations.archives
+}
 
 buildscript {
     repositories {
@@ -31,9 +39,37 @@ dependencies {
     testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
 }
 
+
 uploadArchives {
     repositories {
         mavenLocal()
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: sonatypeUsername, password: sonatypePassword)
+            }
+
+            pom.project {
+                packaging 'jar'
+                description 'Java API for elastic.io'
+                url 'http://www.elastic.io'
+
+                scm {
+                    url 'scm:git@github.com:elasticio/java-api.git'
+                    connection 'scm:git@github.com:elasticio/java-api.git'
+                    developerConnection 'scm:git@github.com:elasticio/java-api.git'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution 'repo'
+                    }
+                }
+            }
+        }
     }
 }
 
