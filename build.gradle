@@ -3,8 +3,6 @@ apply plugin: 'groovy'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'java-library-distribution'
-apply plugin: 'maven-publish'
-apply plugin: 'bintray'
 apply plugin: 'maven'
 apply plugin: 'signing'
 
@@ -18,15 +16,6 @@ targetCompatibility = 1.6
 signing {
     required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
     sign configurations.archives
-}
-
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.3'
-    }
 }
 
 repositories {
@@ -81,32 +70,6 @@ task sourceJar(type: Jar) {
 task javadocs(type: Javadoc) {
     source = sourceSets.main.allJava
     classpath = configurations.compile
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-
-            artifact sourceJar {
-                classifier "sources"
-            }
-        }
-    }
-}
-
-if (project.hasProperty('bintrayUser') && project.hasProperty('bintrayKey')) {
-    bintray {
-        user = bintrayUser //this usually comes form gradle.properties file in ~/.gradle
-        key = bintrayKey //this usually comes form gradle.properties file in ~/.gradle
-        publications = ['mavenJava'] // see publications closure
-        pkg { //package will be created if does not exist
-            repo = 'maven'
-//            userOrg = 'myorg' // an optional organization name when the repo belongs to one of the user's orgs
-            name = 'java-api'
-            licenses = ['Apache-2.0']
-        }
-    }
 }
 
 task wrapper(type: Wrapper) {
