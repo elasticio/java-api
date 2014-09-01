@@ -45,6 +45,7 @@ uploadArchives {
                 }
 
                 pom.project {
+                    name 'elastic.io Java API'
                     packaging 'jar'
                     description 'Java API for elastic.io'
                     url 'http://www.elastic.io'
