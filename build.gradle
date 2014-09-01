@@ -32,33 +32,35 @@ dependencies {
 uploadArchives {
     repositories {
         mavenLocal()
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+        if (project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')) {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: sonatypeUsername, password: sonatypePassword)
-            }
-
-            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: sonatypeUsername, password: sonatypePassword)
-            }
-
-            pom.project {
-                packaging 'jar'
-                description 'Java API for elastic.io'
-                url 'http://www.elastic.io'
-
-                scm {
-                    url 'scm:git@github.com:elasticio/java-api.git'
-                    connection 'scm:git@github.com:elasticio/java-api.git'
-                    developerConnection 'scm:git@github.com:elasticio/java-api.git'
+                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                    authentication(userName: sonatypeUsername, password: sonatypePassword)
                 }
 
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                        distribution 'repo'
+                snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                    authentication(userName: sonatypeUsername, password: sonatypePassword)
+                }
+
+                pom.project {
+                    packaging 'jar'
+                    description 'Java API for elastic.io'
+                    url 'http://www.elastic.io'
+
+                    scm {
+                        url 'scm:git@github.com:elasticio/java-api.git'
+                        connection 'scm:git@github.com:elasticio/java-api.git'
+                        developerConnection 'scm:git@github.com:elasticio/java-api.git'
+                    }
+
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            distribution 'repo'
+                        }
                     }
                 }
             }
@@ -68,12 +70,23 @@ uploadArchives {
 
 
 task sourceJar(type: Jar) {
+    classifier = 'sources'
     from sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
 }
 
 task javadocs(type: Javadoc) {
     source = sourceSets.main.allJava
     classpath = configurations.compile
+}
+
+artifacts {
+    archives sourceJar
+    archives javadocJar
 }
 
 task wrapper(type: Wrapper) {
