@@ -6,7 +6,24 @@ import com.google.gson.JsonObject;
 import java.io.Serializable;
 
 /**
- * Message to be processed by {@link Executor}.
+ * Message to be processed by {@link Executor}. A message may have a body,
+ * which represents a message's payload to be processed, and multiple attachments.
+ * Both body and attachments are {@link JsonObject}s.
+ *
+ * <p>
+ *
+ * A message is build using {@link Builder}, as shown in the following example.
+ *
+ * <pre>
+ * {@code
+ *    JsonElement orders = new Gson().toJsonTree(response.getOrders());
+ *
+ *    JsonObject body = new JsonObject();
+ *    body.add("orders", orders);
+ *
+ *    Message message = new Message.Builder().body(body).build();
+ * }
+ * </pre>
  */
 public class Message implements Serializable {
 
