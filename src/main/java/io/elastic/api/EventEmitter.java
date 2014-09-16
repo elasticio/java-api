@@ -23,6 +23,8 @@ public final class EventEmitter {
     }
 
     /**
+     * @deprecated Please throw {@link Exception} instead.
+     *
      * Emits an {@link Exception}.
      *
      * @param e exception to emit
@@ -88,6 +90,8 @@ public final class EventEmitter {
         }
 
         /**
+         * @deprecated Please throw {@link Exception} instead of emitting events.
+         *
          * Adds 'error' {@link Callback}.
          * @param callback callback invoked on error event
          * @return this instance
