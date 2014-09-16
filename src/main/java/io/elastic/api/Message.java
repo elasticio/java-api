@@ -6,9 +6,20 @@ import com.google.gson.JsonObject;
 import java.io.Serializable;
 
 /**
- * Message to be processed by {@link Executor}. A message may have a body,
+ * Message to be processed by a {@link Component}. A message may have a body,
  * which represents a message's payload to be processed, and multiple attachments.
  * Both body and attachments are {@link JsonObject}s.
+ *
+ * <p>
+ *
+ * A {@link Component} may retrieve a value from {@link Message}'s body by a name,
+ * as shown in the following example.
+ *
+ * <pre>
+ * {@code
+ *    JsonArray orders = message.getBody().get("orders").getAsJsonArray();
+ * }
+ * </pre>
  *
  * <p>
  *

@@ -30,6 +30,47 @@ package io.elastic.api;
  * A component communicates with elastic.io runtime by emitting events, such as
  * <i>data</i>, <i>error</i>, etc. For more info please check out {@link EventEmitter}.
  *
+ * <p>
+ * The following example demonstrates a simple component which echos the incoming message.
+ * </p>
+ *
+ * <pre>
+ * <code>
+ *
+ * public class EchoComponent extends Component {
+ *
+ *    public EchoComponent(EventEmitter eventEmitter) {
+ *       super(eventEmitter);
+ *    }
+ *
+ *    &#064;Override
+ *    public void execute(ExecutionParameters parameters) {
+ *
+ *       final JsonObject snapshot = new JsonObject();
+ *       snapshot.add("echo", parameters.getSnapshot());
+ *
+ *       getEventEmitter()
+ *          .emitSnapshot(snapshot)
+ *          .emitData(echoMessage(parameters));
+ *    }
+ *
+ *    private Message echoMessage(ExecutionParameters parameters) {
+ *
+ *       final Message msg = parameters.getMessage();
+ *
+ *       final JsonObject body = new JsonObject();
+ *       body.add("echo", msg.getBody());
+ *       body.add("config", parameters.getConfiguration());
+ *
+ *       return new Message.Builder()
+ *                   .body(body)
+ *                   .attachments(msg.getAttachments())
+ *                   .build();
+ *    }
+ * }
+ * </code>
+ * </pre>
+ *
  * @see ExecutionParameters
  * @see Message
  * @see EventEmitter
