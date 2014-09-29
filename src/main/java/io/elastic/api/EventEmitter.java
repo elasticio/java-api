@@ -30,7 +30,7 @@ public final class EventEmitter {
      * @param e exception to emit
      * @return this instance
      */
-    public EventEmitter emitException(Exception e) {
+    EventEmitter emitException(Exception e) {
 
         return emit(errorCallback, e);
     }

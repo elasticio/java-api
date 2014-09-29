@@ -1,5 +1,8 @@
 package io.elastic.api;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.reflect.Constructor;
 
 /**
@@ -7,6 +10,9 @@ import java.lang.reflect.Constructor;
  * callee using given {@link EventEmitter}.
  */
 public final class Executor {
+
+
+    private static final Logger logger = LoggerFactory.getLogger(Executor.class);
 
     private String componentClassName;
     private EventEmitter eventEmitter;
@@ -31,8 +37,13 @@ public final class Executor {
     public void execute(ExecutionParameters parameters) {
 
         if (parameters == null) {
-            eventEmitter.emitException(new IllegalArgumentException(
-                    "ExecutionParameters is required. Please pass a parameters object to Executor.execute(parameters)"));
+
+            final IllegalArgumentException exception = new IllegalArgumentException(
+                    "ExecutionParameters is required. Please pass a parameters object to Executor.execute(parameters)");
+
+            logger.error(exception.getMessage());
+
+            eventEmitter.emitException(exception);
 
             return;
         }
@@ -40,6 +51,7 @@ public final class Executor {
         try {
             newComponent().execute(parameters);
         } catch (Exception e) {
+            logger.error("Component execution failed", e);
 
             eventEmitter.emitException(e);
         }
@@ -47,6 +59,8 @@ public final class Executor {
     }
 
     private Component newComponent() throws Exception {
+        logger.debug("Instantiating component {}", componentClassName);
+
         final Class<?> clazz = Class.forName(this.componentClassName);
 
         final Constructor<?> constructor = clazz.getDeclaredConstructor(EventEmitter.class);
