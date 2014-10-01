@@ -2,6 +2,7 @@ package io.elastic.api
 
 import com.google.gson.JsonObject
 import io.elastic.api.demo.EchoComponent
+import io.elastic.api.demo.ErroneousComponent
 import spock.lang.Specification
 
 class ExecutorSpec extends Specification {
@@ -11,12 +12,10 @@ class ExecutorSpec extends Specification {
     def snapshotCallback = Mock(EventEmitter.Callback)
     def emitter = new EventEmitter(errorCallback, dataCallback, snapshotCallback)
 
-    def executor
     def params
 
 
     def setup() {
-        executor = new Executor(EchoComponent.class.getName(), emitter)
 
         def body = new JsonObject()
         body.addProperty('content', 'Hello, world!');
@@ -29,7 +28,7 @@ class ExecutorSpec extends Specification {
 
         def msg = new Message.Builder().body(body).build()
 
-        params =  new ExecutionParameters.Builder(msg)
+        params = new ExecutionParameters.Builder(msg)
                 .configuration(config)
                 .snapshot(snapshot)
                 .build()
@@ -37,7 +36,7 @@ class ExecutorSpec extends Specification {
 
     def "execute without parameters"() {
         when:
-        executor.execute();
+        new Executor(EchoComponent.class.getName(), emitter).execute()
 
         then:
         0 * snapshotCallback.receive(_)
@@ -49,13 +48,27 @@ class ExecutorSpec extends Specification {
         })
     }
 
-    def "execute component successfuly"() {
+    def "executing component failed"() {
         when:
-        executor.execute(params);
+        new Executor(ErroneousComponent.class.getName(), emitter).execute(params)
 
         then:
-        1 * snapshotCallback.receive({it.toString() == '{"echo":{"timestamp":12345}}'})
-        1 * dataCallback.receive({it.toString() == '{"body":{"echo":{"content":"Hello, world!"},"config":{"apiKey":"secret"}},"attachments":{}}'})
+        0 * snapshotCallback.receive(_)
+        0 * dataCallback.receive(_)
+        1 * errorCallback.receive({
+            assert it instanceof RuntimeException
+            assert it.message == 'Ouch! We did not expect that'
+            it
+        })
+    }
+
+    def "execute component successfully"() {
+        when:
+        new Executor(EchoComponent.class.getName(), emitter).execute(params);
+
+        then:
+        1 * snapshotCallback.receive({ it.toString() == '{"echo":{"timestamp":12345}}' })
+        1 * dataCallback.receive({ it.toString() == '{"body":{"echo":{"content":"Hello, world!"},"config":{"apiKey":"secret"}},"attachments":{}}' })
         0 * errorCallback.receive(_)
     }
 }
