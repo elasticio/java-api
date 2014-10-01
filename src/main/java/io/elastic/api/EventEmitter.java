@@ -23,7 +23,7 @@ public final class EventEmitter {
     }
 
     /**
-     * @deprecated Please throw {@link Exception} instead.
+     * FOR INTERNAL USE ONLY.
      *
      * Emits an {@link Exception}.
      *
@@ -90,7 +90,7 @@ public final class EventEmitter {
         }
 
         /**
-         * @deprecated Please throw {@link Exception} instead of emitting events.
+         * FOR INTERNAL USE ONLY.
          *
          * Adds 'error' {@link Callback}.
          * @param callback callback invoked on error event
