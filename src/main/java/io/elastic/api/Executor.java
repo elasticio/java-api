@@ -59,7 +59,7 @@ public final class Executor {
     }
 
     private Component newComponent() throws Exception {
-        logger.debug("Instantiating component {}", componentClassName);
+        logger.info("Instantiating component {}", componentClassName);
 
         final Class<?> clazz = Class.forName(this.componentClassName);
 
