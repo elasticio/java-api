@@ -10,7 +10,9 @@ class ExecutorSpec extends Specification {
     def errorCallback = Mock(EventEmitter.Callback)
     def dataCallback = Mock(EventEmitter.Callback)
     def snapshotCallback = Mock(EventEmitter.Callback)
-    def emitter = new EventEmitter(errorCallback, dataCallback, snapshotCallback)
+    def reboundCallback = Mock(EventEmitter.Callback)
+    
+    def emitter = new EventEmitter(errorCallback, dataCallback, snapshotCallback, reboundCallback)
 
     def params
 
