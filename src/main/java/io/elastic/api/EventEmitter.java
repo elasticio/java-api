@@ -4,10 +4,11 @@ import com.google.gson.JsonObject;
 
 /**
  * Used by a {@link Component} to communicate with the elastic.io runtime.
- *
- * The implementation of this class has been inspired by the
- * <a href="http://nodejs.org/api/events.html" target="_blank">Node.js EventEmitter</a> class.
- *
+ * 
+ * The implementation of this class has been inspired by the <a
+ * href="http://nodejs.org/api/events.html" target="_blank">Node.js
+ * EventEmitter</a> class.
+ * 
  * @see Component
  */
 public final class EventEmitter {
@@ -15,19 +16,23 @@ public final class EventEmitter {
     private Callback errorCallback;
     private Callback dataCallback;
     private Callback snapshotCallback;
+    private Callback reboundCallback;
 
-    private EventEmitter(Callback errorCallback, Callback dataCallback, Callback snapshotCallback) {
+    private EventEmitter(Callback errorCallback, Callback dataCallback, Callback snapshotCallback,
+            Callback reboundCallback) {
         this.errorCallback = errorCallback;
         this.dataCallback = dataCallback;
         this.snapshotCallback = snapshotCallback;
+        this.reboundCallback = reboundCallback;
     }
 
     /**
      * FOR INTERNAL USE ONLY.
-     *
+     * 
      * Emits an {@link Exception}.
-     *
-     * @param e exception to emit
+     * 
+     * @param e
+     *            exception to emit
      * @return this instance
      */
     EventEmitter emitException(Exception e) {
@@ -37,8 +42,9 @@ public final class EventEmitter {
 
     /**
      * Emits a {@link Message}.
-     *
-     * @param message message to emit
+     * 
+     * @param message
+     *            message to emit
      * @return this instance
      */
     public EventEmitter emitData(Message message) {
@@ -48,12 +54,26 @@ public final class EventEmitter {
 
     /**
      * Emits {@link JsonObject} snapshot.
-     * @param snapshot snapshot to emit
+     * 
+     * @param snapshot
+     *            snapshot to emit
      * @return this instance
      */
     public EventEmitter emitSnapshot(JsonObject snapshot) {
 
         return emit(snapshotCallback, snapshot);
+    }
+    
+    /**
+     * Emits the rebound event specifying a {@link JsonObject} reason.
+     * 
+     * @param reason
+     *            reason for rebound
+     * @return this instance
+     */
+    public EventEmitter emitRebound(JsonObject reason) {
+        
+        return emit(reboundCallback, reason);
     }
 
     private EventEmitter emit(Callback callback, Object value) {
@@ -63,19 +83,20 @@ public final class EventEmitter {
     }
 
     /**
-     * This interface defines a callback to be used by {@link Executor}
-     * to pass errors, data and snapshots to its callee.
+     * This interface defines a callback to be used by {@link Executor} to pass
+     * errors, data and snapshots to its callee.
      */
     public interface Callback {
 
         /**
-         * Invoked by {@link Executor} to pass errors, data and snapshots asynchronously.
-         *
-         * @param data data to be passed
+         * Invoked by {@link Executor} to pass errors, data and snapshots
+         * asynchronously.
+         * 
+         * @param data
+         *            data to be passed
          */
         void receive(Object data);
     }
-
 
     /**
      * Used to build {@link EventEmitter} instances.
@@ -84,16 +105,19 @@ public final class EventEmitter {
         private Callback errorCallback;
         private Callback dataCallback;
         private Callback snapshotCallback;
-
+        private Callback reboundCallback;
+        
         public Builder() {
 
         }
 
         /**
          * FOR INTERNAL USE ONLY.
-         *
+         * 
          * Adds 'error' {@link Callback}.
-         * @param callback callback invoked on error event
+         * 
+         * @param callback
+         *            callback invoked on error event
          * @return this instance
          */
         public Builder onError(Callback callback) {
@@ -104,7 +128,9 @@ public final class EventEmitter {
 
         /**
          * Adds 'data' {@link Callback}.
-         * @param callback callback invoked on data event
+         * 
+         * @param callback
+         *            callback invoked on data event
          * @return this instance
          */
         public Builder onData(Callback callback) {
@@ -115,7 +141,9 @@ public final class EventEmitter {
 
         /**
          * Adds 'snapshot' {@link Callback}.
-         * @param callback callback invoked on snapshot event
+         * 
+         * @param callback
+         *            callback invoked on snapshot event
          * @return this instance
          */
         public Builder onSnapshot(Callback callback) {
@@ -125,7 +153,21 @@ public final class EventEmitter {
         }
 
         /**
+         * Adds 'rebound' {@link Callback}.
+         * 
+         * @param callback
+         *            callback invoked on rebound event
+         * @return this instance
+         */
+        public Builder onRebound(Callback callback) {
+            this.reboundCallback = callback;
+            
+            return this;
+        }
+        
+        /**
          * Builds an {@link EventEmitter} instance and returns it.
+         * 
          * @return EventEmitter
          */
         public EventEmitter build() {
@@ -142,7 +184,11 @@ public final class EventEmitter {
                 throw new IllegalStateException("'onSnapshot' callback is required");
             }
 
-            return new EventEmitter(errorCallback, dataCallback, snapshotCallback);
+            if(this.reboundCallback == null) {
+                throw new IllegalStateException("'onRebound' callback is required");
+            }
+            
+            return new EventEmitter(errorCallback, dataCallback, snapshotCallback, reboundCallback);
         }
     }
 
