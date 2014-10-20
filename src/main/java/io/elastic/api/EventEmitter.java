@@ -65,13 +65,13 @@ public final class EventEmitter {
     }
     
     /**
-     * Emits the rebound event specifying a {@link JsonObject} reason.
+     * Emits the rebound event specifying a {@link Object} reason.
      * 
      * @param reason
      *            reason for rebound
      * @return this instance
      */
-    public EventEmitter emitRebound(JsonObject reason) {
+    public EventEmitter emitRebound(Object reason) {
         
         return emit(reboundCallback, reason);
     }

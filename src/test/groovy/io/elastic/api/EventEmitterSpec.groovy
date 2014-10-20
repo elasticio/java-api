@@ -33,11 +33,10 @@ class EventEmitterSpec extends Specification {
     
     def "should emit rebound event" () {
 
-        def reboundCause = new JsonObject()
+        def reboundCause = "Rebound me!"
         
         when:
-        reboundCause.addProperty("message", "Rebound me!")
-        emitter.emitRebound(reboundCause);
+        emitter.emitRebound("Rebound me!");
 
         then:
         0 * snapshotCallback.receive(_)
