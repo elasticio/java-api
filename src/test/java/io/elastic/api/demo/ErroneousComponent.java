@@ -17,16 +17,4 @@ public class ErroneousComponent extends Component {
 
         throw new RuntimeException("Ouch! We did not expect that");
     }
-
-	@Override
-	public JsonObject getMetaModel(JsonObject configuration) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public JsonObject getSelectModel(JsonObject configuration, String identifier) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

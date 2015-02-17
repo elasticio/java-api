@@ -37,16 +37,4 @@ public class EchoComponent extends Component {
                 .attachments(msg.getAttachments())
                 .build();
     }
-
-	@Override
-	public JsonObject getMetaModel(JsonObject configuration) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public JsonObject getSelectModel(JsonObject configuration, String identifier) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
