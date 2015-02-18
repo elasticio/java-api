@@ -19,5 +19,5 @@ public interface SelectModelProvider {
      * @param identifier If the component has multiple select boxes to be populated the identifier helps determine which one requested data
      * @return the select model for a particular select box
      */
-    JsonObject getSelectModel(JsonObject configuration, String identifier);
+    JsonObject getSelectModel(JsonObject configuration);
 }
