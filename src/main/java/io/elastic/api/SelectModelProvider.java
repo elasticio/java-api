@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 
 /**
  * 
- * Interface to be implemented by components which want to provide dynamic metadata
+ * Interface to be implemented by components which want to provide select model
  * 
  * @author Nenad Nikolic nenad@elastic.io
  *
