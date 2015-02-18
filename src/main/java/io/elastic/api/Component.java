@@ -1,6 +1,5 @@
 package io.elastic.api;
 
-import com.google.gson.JsonObject;
 
 /**
  * A component is an unit implementing a custom business logic to be executed
