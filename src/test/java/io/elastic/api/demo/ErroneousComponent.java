@@ -1,7 +1,5 @@
 package io.elastic.api.demo;
 
-import com.google.gson.JsonObject;
-
 import io.elastic.api.Component;
 import io.elastic.api.EventEmitter;
 import io.elastic.api.ExecutionParameters;

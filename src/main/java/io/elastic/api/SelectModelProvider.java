@@ -2,6 +2,14 @@ package io.elastic.api;
 
 import com.google.gson.JsonObject;
 
+
+/**
+ * 
+ * Interface to be implemented by components which want to provide dynamic metadata
+ * 
+ * @author Nenad Nikolic nenad@elastic.io
+ *
+ */
 public interface SelectModelProvider {
 	
 	 /**
