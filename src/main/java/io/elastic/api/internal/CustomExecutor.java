@@ -1,6 +1,7 @@
-package io.elastic.api;
+package io.elastic.api.internal;
 
 import io.elastic.api.DynamicMetadataProvider;
+import io.elastic.api.SelectModelProvider;
 
 import java.lang.reflect.Constructor;
 
