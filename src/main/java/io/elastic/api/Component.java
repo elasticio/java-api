@@ -1,5 +1,6 @@
 package io.elastic.api;
 
+
 /**
  * A component is an unit implementing a custom business logic to be executed
  * in the elastic.io runtime.
@@ -94,7 +95,7 @@ public abstract class Component {
      * @param parameters parameters to execute component with
      */
     abstract public void execute(ExecutionParameters parameters);
-
+    
     /**
      * Used to emit data to component's callee by sending events.
      *
