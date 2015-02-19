@@ -50,7 +50,7 @@ public class CustomExecutor {
 			stackContainer.append(elem.toString() + "\n");
 		}
 		
-		error.addProperty("error", e.getMessage());
+		error.addProperty("message", e.getMessage());
 		error.addProperty("stack", stackContainer.toString());
 		
 		return error;
