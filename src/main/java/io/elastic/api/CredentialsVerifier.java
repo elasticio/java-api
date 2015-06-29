@@ -5,11 +5,12 @@ import com.google.gson.JsonObject;
 /**
  * Interface to be implemented by components to verify user's
  * credentials before they are persisted.
- * <p/>
+ * <p>
  * Typically a credentials verification is implemented by sending
  * an arbitrary request to the given service and analyse the response.
  * For example if the response's status code is <i>HTTP 401 Unauthorized</i>
  * the verification failed.
+ * </p>
  */
 public interface CredentialsVerifier {
 
