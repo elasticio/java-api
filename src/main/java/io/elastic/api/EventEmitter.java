@@ -1,6 +1,8 @@
 package io.elastic.api;
 
 import com.google.gson.JsonObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Used by a {@link Component} to communicate with the elastic.io runtime.
@@ -12,18 +14,24 @@ import com.google.gson.JsonObject;
  * @see Component
  */
 public final class EventEmitter {
+    private static final Logger logger = LoggerFactory.getLogger(EventEmitter.class);
 
     private Callback errorCallback;
     private Callback dataCallback;
     private Callback snapshotCallback;
     private Callback reboundCallback;
+    private Callback updateAccessTokenCallback;
 
-    private EventEmitter(Callback errorCallback, Callback dataCallback, Callback snapshotCallback,
-            Callback reboundCallback) {
+    private EventEmitter(Callback errorCallback,
+                         Callback dataCallback,
+                         Callback snapshotCallback,
+                         Callback reboundCallback,
+                         Callback updateAccessTokenCallback) {
         this.errorCallback = errorCallback;
         this.dataCallback = dataCallback;
         this.snapshotCallback = snapshotCallback;
         this.reboundCallback = reboundCallback;
+        this.updateAccessTokenCallback = updateAccessTokenCallback;
     }
 
     /**
@@ -76,8 +84,31 @@ public final class EventEmitter {
         return emit(reboundCallback, reason);
     }
 
+    /**
+     * Emits the updateAccessToken event.
+     *
+     * @param object
+     *            object containing the tokens
+     * @return this instance
+     */
+    public EventEmitter emitUpdateAccessToken(JsonObject object) {
+
+        return emitOptional(updateAccessTokenCallback, "updateAccessToken", object);
+    }
+
     private EventEmitter emit(Callback callback, Object value) {
         callback.receive(value);
+
+        return this;
+    }
+
+    private EventEmitter emitOptional(Callback callback, String eventName, Object value) {
+
+        if (callback == null) {
+            logger.info("Event {} emitted but no callback is registered", eventName);
+        } else {
+            callback.receive(value);
+        }
 
         return this;
     }
@@ -106,7 +137,8 @@ public final class EventEmitter {
         private Callback dataCallback;
         private Callback snapshotCallback;
         private Callback reboundCallback;
-        
+        private Callback updateAccessTokenCallback;
+
         public Builder() {
 
         }
@@ -164,6 +196,19 @@ public final class EventEmitter {
             
             return this;
         }
+
+        /**
+         * Adds 'updateAccessToken' {@link Callback}.
+         *
+         * @param callback
+         *            callback invoked on updateAccessToken event
+         * @return this instance
+         */
+        public Builder onUpdateAccessTokenCallback(Callback callback) {
+            this.updateAccessTokenCallback = callback;
+
+            return this;
+        }
         
         /**
          * Builds an {@link EventEmitter} instance and returns it.
@@ -188,7 +233,7 @@ public final class EventEmitter {
                 throw new IllegalStateException("'onRebound' callback is required");
             }
             
-            return new EventEmitter(errorCallback, dataCallback, snapshotCallback, reboundCallback);
+            return new EventEmitter(errorCallback, dataCallback, snapshotCallback, reboundCallback, updateAccessTokenCallback);
         }
     }
 
