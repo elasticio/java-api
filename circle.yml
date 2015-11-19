@@ -1,0 +1,10 @@
+machine:
+  java:
+    version: openjdk6
+
+general:
+  artifacts:
+    - "build/reports"
+test:
+  override:
+    - ./gradlew build uploadArchives -PsonatypeUsername=$SONATYPE_USERNAME -PsonatypePassword=$SONATYPE_PASSWORD
