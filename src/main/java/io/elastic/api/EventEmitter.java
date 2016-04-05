@@ -37,7 +37,7 @@ public final class EventEmitter {
     /**
      * Emits an {@link Exception}. Used to emit an exception from component
      * written in asynchronous style, for example using
-     * <a href="https://github.com/ReactiveX/RxJava" targtet="_blank">Reactive Extensions for the JVM </a>.
+     * <a href="https://github.com/ReactiveX/RxJava" target="_blank">Reactive Extensions for the JVM </a>.
      * Any non-asynchronous may throw an exception instead of using this method.
      * 
      * @param e
