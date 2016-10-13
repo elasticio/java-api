@@ -14,12 +14,13 @@ class EventEmitterSpec extends Specification {
     def emitter
 
     def setup() {
-        emitter = new EventEmitter(
-                errorCallback,
-                dataCallback,
-                snapshotCallback,
-                reboundCallback,
-                updateKeysCallback)
+        emitter = new EventEmitter.Builder()
+                .onError(errorCallback)
+                .onData(dataCallback)
+                .onSnapshot(snapshotCallback)
+                .onRebound(reboundCallback)
+                .onUpdateKeys(updateKeysCallback)
+                .build()
     }
 
     def "should emit data event"() {

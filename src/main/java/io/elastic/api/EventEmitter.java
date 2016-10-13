@@ -207,7 +207,7 @@ public final class EventEmitter {
          *            callback invoked on updateAccessToken event
          * @return this instance
          */
-        public Builder onUpdateKeysCallback(Callback callback) {
+        public Builder onUpdateKeys(Callback callback) {
             this.updateKeysCallback = callback;
 
             return this;
