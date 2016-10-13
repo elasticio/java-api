@@ -9,7 +9,7 @@ class EventEmitterSpec extends Specification {
     def dataCallback = Mock(EventEmitter.Callback)
     def snapshotCallback = Mock(EventEmitter.Callback)
     def reboundCallback = Mock(EventEmitter.Callback)
-    def updateAccessTokenCallback = Mock(EventEmitter.Callback)
+    def updateKeysCallback = Mock(EventEmitter.Callback)
 
     def emitter
 
@@ -19,7 +19,7 @@ class EventEmitterSpec extends Specification {
                 dataCallback,
                 snapshotCallback,
                 reboundCallback,
-                updateAccessTokenCallback)
+                updateKeysCallback)
     }
 
     def "should emit data event"() {
@@ -35,7 +35,7 @@ class EventEmitterSpec extends Specification {
         1 * dataCallback.receive(msg)
         0 * errorCallback.receive(_)
         0 * reboundCallback.receive(_)
-        0 * updateAccessTokenCallback.receive(_)
+        0 * updateKeysCallback.receive(_)
     }
 
     def "parse JSON object from #input results in #result"() {
@@ -51,7 +51,7 @@ class EventEmitterSpec extends Specification {
         0 * dataCallback.receive(_)
         0 * errorCallback.receive(_)
         0 * reboundCallback.receive(_)
-        0 * updateAccessTokenCallback.receive(_)
+        0 * updateKeysCallback.receive(_)
     }
     
     def "should emit rebound event" () {
@@ -66,7 +66,7 @@ class EventEmitterSpec extends Specification {
         0 * dataCallback.receive(_)
         0 * errorCallback.receive(_)
         1 * reboundCallback.receive(reboundCause)
-        0 * updateAccessTokenCallback.receive(_)
+        0 * updateKeysCallback.receive(_)
     }
 
     def "should emit error event" () {
@@ -82,7 +82,7 @@ class EventEmitterSpec extends Specification {
         0 * dataCallback.receive(_)
         1 * errorCallback.receive(e)
         0 * reboundCallback.receive(_)
-        0 * updateAccessTokenCallback.receive(_)
+        0 * updateKeysCallback.receive(_)
     }
 
     def "should emit updateAccessToken event" () {
@@ -93,13 +93,13 @@ class EventEmitterSpec extends Specification {
         obj.addProperty("expires_in", "3600")
 
         when:
-        emitter.emitUpdateAccessToken(obj);
+        emitter.emitUpdateKeys(obj);
 
         then:
         0 * snapshotCallback.receive(_)
         0 * dataCallback.receive(_)
         0 * errorCallback.receive(_)
         0 * reboundCallback.receive(_)
-        1 * updateAccessTokenCallback.receive(obj)
+        1 * updateKeysCallback.receive(obj)
     }
 }

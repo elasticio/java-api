@@ -20,18 +20,18 @@ public final class EventEmitter {
     private Callback dataCallback;
     private Callback snapshotCallback;
     private Callback reboundCallback;
-    private Callback updateAccessTokenCallback;
+    private Callback updateKeysCallback;
 
     private EventEmitter(Callback errorCallback,
                          Callback dataCallback,
                          Callback snapshotCallback,
                          Callback reboundCallback,
-                         Callback updateAccessTokenCallback) {
+                         Callback updateKeysCallback) {
         this.errorCallback = errorCallback;
         this.dataCallback = dataCallback;
         this.snapshotCallback = snapshotCallback;
         this.reboundCallback = reboundCallback;
-        this.updateAccessTokenCallback = updateAccessTokenCallback;
+        this.updateKeysCallback = updateKeysCallback;
     }
 
     /**
@@ -86,15 +86,17 @@ public final class EventEmitter {
     }
 
     /**
-     * Emits the updateAccessToken event.
+     * Emits the updateKeys event. This method is typically used in components authorizing with OAuth2 apis.
+     * If an access token is expired, the component needs to refresh them. The refreshed tokens need to be communicated
+     * to the elastic.io platform so that the component is executed with refreshed tokens next time.
      *
      * @param object
      *            object containing the tokens
      * @return this instance
      */
-    public EventEmitter emitUpdateAccessToken(JsonObject object) {
+    public EventEmitter emitUpdateKeys(JsonObject object) {
 
-        return emitOptional(updateAccessTokenCallback, "updateAccessToken", object);
+        return emitOptional(updateKeysCallback, "updateKeys", object);
     }
 
     private EventEmitter emit(Callback callback, Object value) {
@@ -138,7 +140,7 @@ public final class EventEmitter {
         private Callback dataCallback;
         private Callback snapshotCallback;
         private Callback reboundCallback;
-        private Callback updateAccessTokenCallback;
+        private Callback updateKeysCallback;
 
         public Builder() {
 
@@ -205,8 +207,8 @@ public final class EventEmitter {
          *            callback invoked on updateAccessToken event
          * @return this instance
          */
-        public Builder onUpdateAccessTokenCallback(Callback callback) {
-            this.updateAccessTokenCallback = callback;
+        public Builder onUpdateKeysCallback(Callback callback) {
+            this.updateKeysCallback = callback;
 
             return this;
         }
@@ -234,7 +236,7 @@ public final class EventEmitter {
                 throw new IllegalStateException("'onRebound' callback is required");
             }
             
-            return new EventEmitter(errorCallback, dataCallback, snapshotCallback, reboundCallback, updateAccessTokenCallback);
+            return new EventEmitter(errorCallback, dataCallback, snapshotCallback, reboundCallback, updateKeysCallback);
         }
     }
 
