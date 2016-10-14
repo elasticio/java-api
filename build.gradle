@@ -7,7 +7,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 group = 'io.elastic'
-version = '0.0.7-SNAPSHOT'
+version = '0.0.8-SNAPSHOT'
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 sourceCompatibility = 1.6
