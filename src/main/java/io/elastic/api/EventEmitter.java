@@ -1,8 +1,9 @@
 package io.elastic.api;
 
-import com.google.gson.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.json.JsonObject;
 
 /**
  * Used by a {@link Component} to communicate with the elastic.io runtime.

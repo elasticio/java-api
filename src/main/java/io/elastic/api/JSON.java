@@ -1,10 +1,10 @@
 package io.elastic.api;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
-import java.lang.reflect.Type;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import java.io.ByteArrayInputStream;
 
 /**
  * JSON utilities.
@@ -26,16 +26,10 @@ public final class JSON {
             return null;
         }
 
-        final Gson gson = new Gson();
+        final JsonReader reader = Json.createReader(
+                new ByteArrayInputStream(input.getBytes()));
 
-        final JsonElement json = gson.fromJson(input, (Type) JsonObject.class);
-
-
-        if (!json.isJsonObject()) {
-            throw new IllegalArgumentException(String.format("%s cannot be parsed to a JsonObject", input));
-        }
-
-        return (JsonObject) json;
+        return reader.readObject();
 
     }
 }

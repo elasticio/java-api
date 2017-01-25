@@ -1,9 +1,11 @@
 package io.elastic.api;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonWriter;
 import java.io.Serializable;
+import java.io.StringWriter;
 
 /**
  * Message to be processed by a {@link Component}. A message may have a body,
@@ -82,9 +84,16 @@ public class Message implements Serializable {
 
     @Override
     public String toString() {
-        final Gson gson = new Gson();
+        final JsonObject json = Json.createObjectBuilder()
+                .add("body", body)
+                .add("attachments", attachments)
+                .build();
+        final StringWriter writer = new StringWriter();
+        final JsonWriter jsonWriter = Json.createWriter(writer);
+        jsonWriter.writeObject(json);
+        jsonWriter.close();
 
-        return gson.toJson(this);
+        return writer.toString();
     }
 
     /**
@@ -98,8 +107,8 @@ public class Message implements Serializable {
          * Default constructor.
          */
         public Builder() {
-            this.body = new JsonObject();
-            this.attachments = new JsonObject();
+            this.body = Json.createObjectBuilder().build();
+            this.attachments = Json.createObjectBuilder().build();
         }
 
         /**

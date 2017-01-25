@@ -1,9 +1,10 @@
 package io.elastic.api
 
-import com.google.gson.JsonObject
 import io.elastic.api.demo.EchoComponent
 import io.elastic.api.demo.ErroneousComponent
 import spock.lang.Specification
+
+import javax.json.Json
 
 class ExecutorSpec extends Specification {
 
@@ -25,14 +26,17 @@ class ExecutorSpec extends Specification {
 
     def setup() {
 
-        def body = new JsonObject()
-        body.addProperty('content', 'Hello, world!');
+        def body = Json.createObjectBuilder()
+                .add('content', 'Hello, world!')
+                .build()
 
-        def config = new JsonObject()
-        config.addProperty('apiKey', 'secret');
+        def config = Json.createObjectBuilder()
+                .add('apiKey', 'secret')
+                .build()
 
-        def snapshot = new JsonObject()
-        snapshot.addProperty('timestamp', 12345);
+        def snapshot = Json.createObjectBuilder()
+                .add('timestamp', 12345)
+                .build()
 
         def msg = new Message.Builder().body(body).build()
 

@@ -1,7 +1,8 @@
 package io.elastic.api;
 
-import com.google.gson.JsonObject;
 
+import javax.json.Json;
+import javax.json.JsonObject;
 import java.io.Serializable;
 
 /**
@@ -69,8 +70,8 @@ public final class ExecutionParameters implements Serializable {
             }
 
             this.message = message;
-            this.configuration = new JsonObject();
-            this.snapshot = new JsonObject();
+            this.configuration = Json.createObjectBuilder().build();
+            this.snapshot = Json.createObjectBuilder().build();
         }
 
         /**

@@ -1,6 +1,8 @@
-import com.google.gson.JsonObject
 import io.elastic.api.JSON
-import spock.lang.*
+import spock.lang.Specification
+import spock.lang.Unroll
+
+import javax.json.Json
 
 @Unroll
 class JSONSpec extends Specification {
@@ -11,7 +13,7 @@ class JSONSpec extends Specification {
 
         where:
         input << [null, "{}"]
-        result << [null, new JsonObject()]
+        result << [null, Json.createObjectBuilder().build()]
     }
 
     def "parsing a JSON array as JSON fails"() {
@@ -19,7 +21,7 @@ class JSONSpec extends Specification {
         JSON.parse("[]")
 
         then:
-        def e = thrown(IllegalArgumentException)
-        e.message == "[] cannot be parsed to a JsonObject"
+        def e = thrown(javax.json.JsonException)
+        e.message == "Cannot read JSON object, found JSON array"
     }
 }
