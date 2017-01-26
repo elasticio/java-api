@@ -1,12 +1,10 @@
 package io.elastic.api;
 
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-import javax.json.JsonWriter;
+import javax.json.*;
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
+import java.util.concurrent.Callable;
 
 /**
  * JSON utilities.
@@ -23,7 +21,41 @@ public final class JSON {
      * @param input string to parse
      * @return JsonObject
      */
-    public static JsonObject parse(String input) {
+    public static JsonObject parseObject(String input) {
+        final JsonReader reader = createReader(input);
+
+        if (reader == null) {
+            return null;
+        }
+
+        try {
+            return reader.readObject();
+        } finally {
+            reader.close();
+        }
+    }
+
+    /**
+     * Parses a String into a {@link JsonArray}.
+     *
+     * @param input string to parse
+     * @return JsonArray
+     */
+    public static JsonArray parseArray(String input) {
+        final JsonReader reader = createReader(input);
+
+        if (reader == null) {
+            return null;
+        }
+
+        try {
+            return reader.readArray();
+        } finally {
+            reader.close();
+        }
+    }
+
+    private static <T> JsonReader createReader(final String input) {
         if (input == null) {
             return null;
         }
@@ -31,8 +63,7 @@ public final class JSON {
         final JsonReader reader = Json.createReader(
                 new ByteArrayInputStream(input.getBytes()));
 
-        return reader.readObject();
-
+        return reader;
     }
 
     /**
