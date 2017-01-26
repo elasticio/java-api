@@ -24,4 +24,13 @@ class JSONSpec extends Specification {
         def e = thrown(javax.json.JsonException)
         e.message == "Cannot read JSON object, found JSON array"
     }
+
+    def "stringify"() {
+        setup:
+        def json = Json.createObjectBuilder()
+                .add('hello', 'world')
+                .build();
+        expect:
+        JSON.stringify(json) == '{"hello":"world"}'
+    }
 }
