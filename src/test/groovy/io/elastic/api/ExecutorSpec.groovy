@@ -80,7 +80,12 @@ class ExecutorSpec extends Specification {
 
         then:
         1 * snapshotCallback.receive({ it.toString() == '{"echo":{"timestamp":12345}}' })
-        1 * dataCallback.receive({ it.toString() == '{"body":{"echo":{"content":"Hello, world!"},"config":{"apiKey":"secret"}},"attachments":{}}' })
+        1 * dataCallback.receive({
+            JSON.stringify(it.getBody()) == "{\"echo\":{\"content\":\"Hello, world!\"},\"config\":{\"apiKey\":\"secret\"}}"
+            it.getId() != null
+            it.getHeaders().isEmpty()
+            it.getAttachments().isEmpty()
+        })
         0 * errorCallback.receive(_)
     }
 }

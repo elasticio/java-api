@@ -6,6 +6,7 @@ import javax.json.JsonObject;
 import javax.json.JsonWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.util.UUID;
 
 /**
  * Message to be processed by a {@link Component}. A message may have a body,
@@ -43,26 +44,56 @@ public class Message implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private UUID id;
+    private JsonObject headers;
     private JsonObject body;
     private JsonObject attachments;
 
     /**
-     * Creates a message with a body.
+     * Creates a message with headers, body and attachments.
      *
+     * @param headers     headers of the message
      * @param body        body of the message
      * @param attachments attachments of the message
      */
-    private Message(final JsonObject body, final JsonObject attachments) {
+    private Message(final JsonObject headers,
+                    final JsonObject body,
+                    final JsonObject attachments) {
+        this.id = UUID.randomUUID();
+
+        if (headers == null) {
+            throw new IllegalArgumentException("Message headers must not be null");
+        }
+
         if (body == null) {
             throw new IllegalArgumentException("Message body must not be null");
         }
 
         if (attachments == null) {
-            throw new IllegalStateException("Attachments must not be null");
+            throw new IllegalArgumentException("Message attachments must not be null");
         }
 
+        this.headers = headers;
         this.body = body;
         this.attachments = attachments;
+    }
+
+    /**
+     * Returns message id.
+     *
+     * @return id
+     */
+    public UUID getId() {
+        return id;
+    }
+
+    /**
+     * Returns message headers.
+     *
+     * @return headers
+     */
+    public JsonObject getHeaders() {
+        return headers;
     }
 
     /**
@@ -86,6 +117,8 @@ public class Message implements Serializable {
     @Override
     public String toString() {
         final JsonObject json = Json.createObjectBuilder()
+                .add("id", id.toString())
+                .add("headers", headers)
                 .add("body", body)
                 .add("attachments", attachments)
                 .build();
@@ -101,6 +134,7 @@ public class Message implements Serializable {
      * Used to build {@link Message} instances.
      */
     public static final class Builder {
+        private JsonObject headers;
         private JsonObject body;
         private JsonObject attachments;
 
@@ -108,8 +142,22 @@ public class Message implements Serializable {
          * Default constructor.
          */
         public Builder() {
+            this.headers = Json.createObjectBuilder().build();
             this.body = Json.createObjectBuilder().build();
             this.attachments = Json.createObjectBuilder().build();
+        }
+
+        /**
+         * Adds a headers to build message with.
+         *
+         * @param headers headers for the message
+         * @return same builder instance
+         */
+        public Builder headers(JsonObject headers) {
+
+            this.headers = headers;
+
+            return this;
         }
 
         /**
@@ -143,7 +191,7 @@ public class Message implements Serializable {
          * @return Message
          */
         public Message build() {
-            return new Message(this.body, this.attachments);
+            return new Message(this.headers, this.body, this.attachments);
         }
     }
 }
