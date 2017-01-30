@@ -47,8 +47,9 @@ package io.elastic.api;
  *    &#064;Override
  *    public void execute(ExecutionParameters parameters) {
  *
- *       final JsonObject snapshot = new JsonObject();
- *       snapshot.add("echo", parameters.getSnapshot());
+ *       final JsonObject snapshot = Json.createObjectBuilder()
+ *               .add("echo", parameters.getSnapshot())
+ *               .build();
  *
  *       getEventEmitter()
  *          .emitSnapshot(snapshot)
@@ -59,9 +60,10 @@ package io.elastic.api;
  *
  *       final Message msg = parameters.getMessage();
  *
- *       final JsonObject body = new JsonObject();
- *       body.add("echo", msg.getBody());
- *       body.add("config", parameters.getConfiguration());
+ *       final JsonObject body = Json.createObjectBuilder()
+ *               .add("echo", msg.getBody())
+ *               .add("config", parameters.getConfiguration())
+ *               .build();
  *
  *       return new Message.Builder()
  *                   .body(body)
