@@ -19,7 +19,7 @@ import java.io.StringWriter;
  *
  * <pre>
  * {@code
- *    JsonArray orders = message.getBody().get("orders").getAsJsonArray();
+ *    JsonArray orders = message.getBody().orders("orders");
  * }
  * </pre>
  *
@@ -29,10 +29,11 @@ import java.io.StringWriter;
  *
  * <pre>
  * {@code
- *    JsonElement orders = new Gson().toJsonTree(response.getOrders());
+ *    JsonArray orders = JSON.parseArray(response.getOrders());
  *
- *    JsonObject body = new JsonObject();
- *    body.add("orders", orders);
+ *    JsonObject body = Json.createObjectBuilder()
+ *            .add("orders", orders)
+ *            .build();
  *
  *    Message message = new Message.Builder().body(body).build();
  * }
