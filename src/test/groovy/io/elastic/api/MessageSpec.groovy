@@ -6,6 +6,15 @@ import javax.json.Json
 
 class MessageSpec extends Specification {
 
+    def "throw exception if id null"() {
+        when:
+        new Message.Builder().id(null).build()
+
+        then:
+        def e = thrown(IllegalArgumentException)
+        e.message == "Message id must not be null"
+    }
+
     def "throw exception if headers null"() {
         when:
         new Message.Builder().headers(null).build()

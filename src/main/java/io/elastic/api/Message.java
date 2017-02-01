@@ -52,14 +52,19 @@ public class Message implements Serializable {
     /**
      * Creates a message with headers, body and attachments.
      *
+     * @param id          id of the message
      * @param headers     headers of the message
      * @param body        body of the message
      * @param attachments attachments of the message
      */
-    private Message(final JsonObject headers,
+    private Message(final UUID id,
+                    final JsonObject headers,
                     final JsonObject body,
                     final JsonObject attachments) {
-        this.id = UUID.randomUUID();
+
+        if (id == null) {
+            throw new IllegalArgumentException("Message id must not be null");
+        }
 
         if (headers == null) {
             throw new IllegalArgumentException("Message headers must not be null");
@@ -73,6 +78,7 @@ public class Message implements Serializable {
             throw new IllegalArgumentException("Message attachments must not be null");
         }
 
+        this.id = id;
         this.headers = headers;
         this.body = body;
         this.attachments = attachments;
@@ -134,6 +140,7 @@ public class Message implements Serializable {
      * Used to build {@link Message} instances.
      */
     public static final class Builder {
+        private UUID id;
         private JsonObject headers;
         private JsonObject body;
         private JsonObject attachments;
@@ -142,9 +149,23 @@ public class Message implements Serializable {
          * Default constructor.
          */
         public Builder() {
+            this.id = UUID.randomUUID();
             this.headers = Json.createObjectBuilder().build();
             this.body = Json.createObjectBuilder().build();
             this.attachments = Json.createObjectBuilder().build();
+        }
+
+        /**
+         * Sets message id.
+         *
+         * @param id id for the message
+         * @return same builder instance
+         */
+        public Builder id(UUID id) {
+
+            this.id = id;
+
+            return this;
         }
 
         /**
@@ -191,7 +212,7 @@ public class Message implements Serializable {
          * @return Message
          */
         public Message build() {
-            return new Message(this.headers, this.body, this.attachments);
+            return new Message(this.id, this.headers, this.body, this.attachments);
         }
     }
 }
