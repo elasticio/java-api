@@ -15,8 +15,8 @@ class HttpReplySpec extends Specification {
 
     def "build reply successfully"() {
         when:
-        def stream = new ByteArrayOutputStream()
-        stream.write("hello".getBytes())
+        def stream = new ByteArrayInputStream("hello".getBytes())
+
         def reply = new HttpReply.Builder()
                 .content(stream)
                 .status(HttpReply.Status.ACCEPTED)

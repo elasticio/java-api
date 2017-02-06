@@ -1,19 +1,17 @@
 package io.elastic.api;
 
-import java.io.OutputStream;
-import java.util.ArrayList;
+import java.io.InputStream;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public final class HttpReply {
 
     private int status;
     private Map<String, String> headers = new HashMap();
-    private OutputStream content;
+    private InputStream content;
 
     private HttpReply(final int status,
-                      final OutputStream content,
+                      final InputStream content,
                       final Map<String, String> headers) {
         if (content == null) {
             throw new IllegalArgumentException("HttpReply content must not be null");
@@ -34,7 +32,7 @@ public final class HttpReply {
         return headers;
     }
 
-    public OutputStream getContent() {
+    public InputStream getContent() {
         return content;
     }
 
@@ -49,7 +47,7 @@ public final class HttpReply {
 
     public static final class Builder {
         private int status;
-        private OutputStream content;
+        private InputStream content;
         private Map<String, String> headers = new HashMap();
 
         public Builder() {
@@ -66,7 +64,7 @@ public final class HttpReply {
             return this;
         }
 
-        public Builder content(final OutputStream content) {
+        public Builder content(final InputStream content) {
             if (content == null) {
                 throw new IllegalArgumentException("Content must not be null");
             }

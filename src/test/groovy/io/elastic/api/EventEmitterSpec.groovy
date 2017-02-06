@@ -109,10 +109,8 @@ class EventEmitterSpec extends Specification {
 
     def "should emit httpReply event" () {
         setup:
-        def stream = new ByteArrayOutputStream()
-        stream.write("hello".getBytes())
         def reply = new HttpReply.Builder()
-                .content(stream)
+                .content(new ByteArrayInputStream("hello".getBytes()))
                 .status(HttpReply.Status.OK)
                 .header('X-Powered-By', 'elastic.io')
                 .build()
