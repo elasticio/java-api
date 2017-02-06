@@ -9,12 +9,12 @@ import java.util.Map;
 public final class HttpReply {
 
     private int status;
-    private Map<String, List<String>> headers = new HashMap();
+    private Map<String, String> headers = new HashMap();
     private OutputStream content;
 
     private HttpReply(final int status,
                       final OutputStream content,
-                      final Map<String, List<String>> headers) {
+                      final Map<String, String> headers) {
         if (content == null) {
             throw new IllegalArgumentException("HttpReply content must not be null");
         }
@@ -30,7 +30,7 @@ public final class HttpReply {
         return status;
     }
 
-    public Map<String, List<String>> getHeaders() {
+    public Map<String, String> getHeaders() {
         return headers;
     }
 
@@ -50,7 +50,7 @@ public final class HttpReply {
     public static final class Builder {
         private int status;
         private OutputStream content;
-        private Map<String, List<String>> headers = new HashMap();
+        private Map<String, String> headers = new HashMap();
 
         public Builder() {
         }
@@ -60,15 +60,8 @@ public final class HttpReply {
             return this;
         }
 
-        public Builder header(final String name, String value) {
-            List<String> values = this.headers.get(name);
-
-            if (values == null) {
-                values = new ArrayList();
-                this.headers.put(name, values);
-            }
-
-            values.add(value);
+        public Builder header(final String name, final String value) {
+            this.headers.put(name, value);
 
             return this;
         }

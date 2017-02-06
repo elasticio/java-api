@@ -21,16 +21,11 @@ class HttpReplySpec extends Specification {
                 .content(stream)
                 .status(HttpReply.Status.ACCEPTED)
                 .header('X-Powered-By', 'elastic.io')
-                .header('x-accept', 'foo')
-                .header('x-accept', 'bar')
                 .build()
 
         then:
         reply.status == HttpReply.Status.ACCEPTED.statusCode
         reply.content == stream
-        reply.headers == [
-                'X-Powered-By': ['elastic.io'],
-                'x-accept'    : ['foo', 'bar']
-        ]
+        reply.headers == ['X-Powered-By': 'elastic.io']
     }
 }
