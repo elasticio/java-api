@@ -11,6 +11,7 @@ class EventEmitterSpec extends Specification {
     def snapshotCallback = Mock(EventEmitter.Callback)
     def reboundCallback = Mock(EventEmitter.Callback)
     def updateKeysCallback = Mock(EventEmitter.Callback)
+    def httpReplyCallback = Mock(EventEmitter.Callback)
 
     def emitter
 
@@ -21,6 +22,7 @@ class EventEmitterSpec extends Specification {
                 .onSnapshot(snapshotCallback)
                 .onRebound(reboundCallback)
                 .onUpdateKeys(updateKeysCallback)
+                .onHttpReplyCallback(httpReplyCallback)
                 .build()
     }
 
@@ -103,5 +105,27 @@ class EventEmitterSpec extends Specification {
         0 * errorCallback.receive(_)
         0 * reboundCallback.receive(_)
         1 * updateKeysCallback.receive(obj)
+    }
+
+    def "should emit httpReply event" () {
+        setup:
+        def stream = new ByteArrayOutputStream()
+        stream.write("hello".getBytes())
+        def reply = new HttpReply.Builder()
+                .content(stream)
+                .status(HttpReply.Status.OK)
+                .header('X-Powered-By', 'elastic.io')
+                .build()
+
+        when:
+        emitter.emitHttpReply(reply);
+
+        then:
+        0 * snapshotCallback.receive(_)
+        0 * dataCallback.receive(_)
+        0 * errorCallback.receive(_)
+        0 * reboundCallback.receive(_)
+        0 * updateKeysCallback.receive(_)
+        1 * httpReplyCallback.receive(reply)
     }
 }

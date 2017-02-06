@@ -13,13 +13,15 @@ class ExecutorSpec extends Specification {
     def snapshotCallback = Mock(EventEmitter.Callback)
     def reboundCallback = Mock(EventEmitter.Callback)
     def updateAccessTokenCallback = Mock(EventEmitter.Callback)
+    def httpReplyCallback = Mock(EventEmitter.Callback)
 
     def emitter = new EventEmitter(
             errorCallback,
             dataCallback,
             snapshotCallback,
             reboundCallback,
-            updateAccessTokenCallback)
+            updateAccessTokenCallback,
+            httpReplyCallback)
 
     def params
 

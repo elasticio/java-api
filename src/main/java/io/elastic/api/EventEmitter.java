@@ -22,17 +22,20 @@ public final class EventEmitter {
     private Callback snapshotCallback;
     private Callback reboundCallback;
     private Callback updateKeysCallback;
+    private Callback httpReplyCallback;
 
     private EventEmitter(Callback errorCallback,
                          Callback dataCallback,
                          Callback snapshotCallback,
                          Callback reboundCallback,
-                         Callback updateKeysCallback) {
+                         Callback updateKeysCallback,
+                         Callback httpReplyCallback) {
         this.errorCallback = errorCallback;
         this.dataCallback = dataCallback;
         this.snapshotCallback = snapshotCallback;
         this.reboundCallback = reboundCallback;
         this.updateKeysCallback = updateKeysCallback;
+        this.httpReplyCallback = httpReplyCallback;
     }
 
     /**
@@ -100,6 +103,18 @@ public final class EventEmitter {
         return emitOptional(updateKeysCallback, "updateKeys", object);
     }
 
+    /**
+     * Emits the httpReply event. This method is typically used to emit a HTTP reply in real-time flows.
+     *
+     * @param reply
+     *            HTTP reply
+     * @return this instance
+     */
+    public EventEmitter emitHttpReply(final HttpReply reply) {
+
+        return emitOptional(httpReplyCallback, "httpReply", reply);
+    }
+
     private EventEmitter emit(Callback callback, Object value) {
         callback.receive(value);
 
@@ -142,6 +157,7 @@ public final class EventEmitter {
         private Callback snapshotCallback;
         private Callback reboundCallback;
         private Callback updateKeysCallback;
+        private Callback httpReplyCallback;
 
         public Builder() {
 
@@ -213,6 +229,19 @@ public final class EventEmitter {
 
             return this;
         }
+
+        /**
+         * Adds 'httpReply' {@link Callback}.
+         *
+         * @param callback
+         *            callback invoked on httpReply event
+         * @return this instance
+         */
+        public Builder onHttpReplyCallback(Callback callback) {
+            this.httpReplyCallback = callback;
+
+            return this;
+        }
         
         /**
          * Builds an {@link EventEmitter} instance and returns it.
@@ -236,8 +265,18 @@ public final class EventEmitter {
             if(this.reboundCallback == null) {
                 throw new IllegalStateException("'onRebound' callback is required");
             }
+
+            if(this.httpReplyCallback == null) {
+                throw new IllegalStateException("'onHttpReplyCallback' callback is required");
+            }
             
-            return new EventEmitter(errorCallback, dataCallback, snapshotCallback, reboundCallback, updateKeysCallback);
+            return new EventEmitter(
+                    errorCallback,
+                    dataCallback,
+                    snapshotCallback,
+                    reboundCallback,
+                    updateKeysCallback,
+                    httpReplyCallback);
         }
     }
 
