@@ -233,6 +233,8 @@ public final class EventEmitter {
         /**
          * Adds 'httpReply' {@link Callback}.
          *
+         * @since 2.0
+         *
          * @param callback
          *            callback invoked on httpReply event
          * @return this instance

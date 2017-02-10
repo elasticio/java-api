@@ -1,6 +1,9 @@
 package io.elastic.api;
 
 
+import javax.json.Json;
+import javax.json.JsonObject;
+
 /**
  * A component is an unit implementing a custom business logic to be executed
  * in the elastic.io runtime.
@@ -97,6 +100,34 @@ public abstract class Component {
      * @param parameters parameters to execute component with
      */
     abstract public void execute(ExecutionParameters parameters);
+
+    /**
+     * Used to initialize the component on flow start. For example, a webhook trigger can subscribe a webhook url
+     * to receive events from a target API inside this method. The subscription data, such as ID, can be returned
+     * from this method as JSON object for persistence in the platform. Once <i>shutdown</i> method is
+     * supported, the persisted JSON will be passed as argument to <i>shutdown</i> method where the subscription
+     * can be canceled on flow stop.
+     *
+     * @since 2.0
+     *
+     * @param configuration component's configuration
+     * @return JSON object to be persisted or null
+     */
+    public JsonObject startup(final JsonObject configuration) {
+        return Json.createObjectBuilder().build();
+    }
+
+    /**
+     * Used to initialize a component before message processing. For polling flows this method
+     * is called once per scheduled execution. For real-time flows this method is called once on first execution.
+     *
+     * @since 2.0
+     *
+     * @param configuration component's configuration
+     */
+    public void init(final JsonObject configuration) {
+        // default implementation does nothing
+    }
     
     /**
      * Used to emit data to component's callee by sending events.
