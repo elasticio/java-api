@@ -8,20 +8,15 @@ import io.elastic.api.Message;
 import javax.json.Json;
 import javax.json.JsonObject;
 
-public class EchoComponent extends Component {
+public class EchoComponent implements Component {
 
-    public EchoComponent(EventEmitter eventEmitter) {
-        super(eventEmitter);
-    }
-
-    @Override
     public void execute(ExecutionParameters parameters) {
 
         final JsonObject snapshot = Json.createObjectBuilder()
                 .add("echo", parameters.getSnapshot())
                 .build();
 
-        getEventEmitter()
+        parameters.getEventEmitter()
                 .emitSnapshot(snapshot)
                 .emitData(echoMessage(parameters));
     }

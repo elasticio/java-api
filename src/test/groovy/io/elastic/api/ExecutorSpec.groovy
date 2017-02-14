@@ -42,7 +42,7 @@ class ExecutorSpec extends Specification {
 
         def msg = new Message.Builder().body(body).build()
 
-        params = new ExecutionParameters.Builder(msg)
+        params = new ExecutionParameters.Builder(msg, emitter)
                 .configuration(config)
                 .snapshot(snapshot)
                 .build()
@@ -50,21 +50,19 @@ class ExecutorSpec extends Specification {
 
     def "execute without parameters"() {
         when:
-        new Executor(EchoComponent.class.getName(), emitter).execute()
+        new Executor(EchoComponent.class.getName()).execute()
 
         then:
+        IllegalArgumentException e = thrown()
+        e.message == 'ExecutionParameters is required. Please pass a parameters object to Executor.execute(parameters)'
         0 * snapshotCallback.receive(_)
         0 * dataCallback.receive(_)
-        1 * errorCallback.receive({
-            assert it instanceof IllegalArgumentException
-            assert it.message == 'ExecutionParameters is required. Please pass a parameters object to Executor.execute(parameters)'
-            it
-        })
+        0 * errorCallback.receive(_)
     }
 
     def "executing component failed"() {
         when:
-        new Executor(ErroneousComponent.class.getName(), emitter).execute(params)
+        new Executor(ErroneousComponent.class.getName()).execute(params)
 
         then:
         0 * snapshotCallback.receive(_)
@@ -78,7 +76,7 @@ class ExecutorSpec extends Specification {
 
     def "execute component successfully"() {
         when:
-        new Executor(EchoComponent.class.getName(), emitter).execute(params);
+        new Executor(EchoComponent.class.getName()).execute(params);
 
         then:
         1 * snapshotCallback.receive({ it.toString() == '{"echo":{"timestamp":12345}}' })

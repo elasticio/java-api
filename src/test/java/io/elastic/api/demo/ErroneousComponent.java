@@ -4,11 +4,7 @@ import io.elastic.api.Component;
 import io.elastic.api.EventEmitter;
 import io.elastic.api.ExecutionParameters;
 
-public class ErroneousComponent extends Component {
-
-    public ErroneousComponent(EventEmitter eventEmitter) {
-        super(eventEmitter);
-    }
+public class ErroneousComponent implements Component {
 
     @Override
     public void execute(ExecutionParameters parameters) {

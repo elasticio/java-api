@@ -81,25 +81,14 @@ import javax.json.JsonObject;
  * @see Message
  * @see EventEmitter
  */
-public abstract class Component {
-
-    private EventEmitter eventEmitter;
-
-    /**
-     * Creates a component instance with the given {@link EventEmitter}.
-     *
-     * @param eventEmitter emitter to emit events
-     */
-    public Component(EventEmitter eventEmitter) {
-        this.eventEmitter = eventEmitter;
-    }
+public interface Component {
 
     /**
      * Executes this component with the given {@link ExecutionParameters}.
      *
      * @param parameters parameters to execute component with
      */
-    abstract public void execute(ExecutionParameters parameters);
+    void execute(ExecutionParameters parameters);
 
     /**
      * Used to initialize the component on flow start. For example, a webhook trigger can subscribe a webhook url
@@ -113,7 +102,7 @@ public abstract class Component {
      * @param configuration component's configuration
      * @return JSON object to be persisted or null
      */
-    public JsonObject startup(final JsonObject configuration) {
+    default JsonObject startup(final JsonObject configuration) {
         return Json.createObjectBuilder().build();
     }
 
@@ -125,16 +114,7 @@ public abstract class Component {
      *
      * @param configuration component's configuration
      */
-    public void init(final JsonObject configuration) {
+    default void init(final JsonObject configuration) {
         // default implementation does nothing
-    }
-    
-    /**
-     * Used to emit data to component's callee by sending events.
-     *
-     * @return instance of EventEmitter
-     */
-    protected EventEmitter getEventEmitter() {
-        return eventEmitter;
     }
 }

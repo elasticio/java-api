@@ -15,18 +15,14 @@ public final class Executor {
     private static final Logger logger = LoggerFactory.getLogger(Executor.class);
 
     private String componentClassName;
-    private EventEmitter eventEmitter;
 
     /**
-     * Creates a new instance of {@link Executor} with given {@link Component}
-     * class name and {@link EventEmitter}.
+     * Creates a new instance of {@link Executor} with given {@link Component} class name.
      *
      * @param componentClassName fully qualified name of a component to execute
-     * @param eventEmitter       used to emit execution results
      */
-    public Executor(String componentClassName, EventEmitter eventEmitter) {
+    public Executor(String componentClassName) {
         this.componentClassName = componentClassName;
-        this.eventEmitter = eventEmitter;
     }
 
     /**
@@ -37,34 +33,34 @@ public final class Executor {
     public void execute(ExecutionParameters parameters) {
 
         if (parameters == null) {
-
-            final IllegalArgumentException exception = new IllegalArgumentException(
+            throw new IllegalArgumentException(
                     "ExecutionParameters is required. Please pass a parameters object to Executor.execute(parameters)");
+        }
 
-            logger.error(exception.getMessage());
-
-            eventEmitter.emitException(exception);
-
+        Component component;
+        try {
+            component = newComponent();
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            logger.error("Component instantiation failed", e);
+            parameters.getEventEmitter().emitException(e);
             return;
         }
 
         try {
-            newComponent().execute(parameters);
-        } catch (Exception e) {
-            logger.error("Component execution failed", e);
-
-            eventEmitter.emitException(e);
+            component.execute(parameters);
+        } catch (RuntimeException e) {
+            logger.error("Component instantiation failed", e);
+            parameters.getEventEmitter().emitException(e);
         }
 
     }
 
-    private Component newComponent() throws Exception {
+    private Component newComponent() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         logger.info("Instantiating component {}", componentClassName);
 
         final Class<?> clazz = Class.forName(this.componentClassName);
 
-        final Constructor<?> constructor = clazz.getDeclaredConstructor(EventEmitter.class);
+        return (Component) clazz.cast(clazz.newInstance());
 
-        return (Component) clazz.cast(constructor.newInstance(this.eventEmitter));
     }
 }
