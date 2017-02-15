@@ -133,14 +133,12 @@ public final class EventEmitter {
     }
 
     /**
-     * This interface defines a callback to be used by {@link Executor} to pass
-     * errors, data and snapshots to its callee.
+     * This interface defines a callback to pass errors, data and snapshots to its callee.
      */
     public interface Callback {
 
         /**
-         * Invoked by {@link Executor} to pass errors, data and snapshots
-         * asynchronously.
+         * Invoked to pass errors, data and snapshots asynchronously.
          * 
          * @param data
          *            data to be passed

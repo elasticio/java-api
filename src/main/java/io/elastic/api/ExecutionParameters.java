@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 /**
  * Represents parameters for a {@link Component} execution passed
- * to {@link Executor#execute(ExecutionParameters)}.
+ * to {@link Component#execute(ExecutionParameters)}.
  */
 public final class ExecutionParameters implements Serializable {
 

@@ -41,11 +41,8 @@ import javax.json.JsonObject;
  * <pre>
  * <code>
  *
- * public class EchoComponent extends Component {
+ * public class EchoComponent implements Component {
  *
- *    public EchoComponent(EventEmitter eventEmitter) {
- *       super(eventEmitter);
- *    }
  *
  *    &#064;Override
  *    public void execute(ExecutionParameters parameters) {
@@ -54,7 +51,7 @@ import javax.json.JsonObject;
  *               .add("echo", parameters.getSnapshot())
  *               .build();
  *
- *       getEventEmitter()
+ *       parameters.getEventEmitter()
  *          .emitSnapshot(snapshot)
  *          .emitData(echoMessage(parameters));
  *    }
