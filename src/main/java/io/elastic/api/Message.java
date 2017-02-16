@@ -9,13 +9,13 @@ import java.io.StringWriter;
 import java.util.UUID;
 
 /**
- * Message to be processed by a {@link Component}. A message may have a body,
+ * Message to be processed by a {@link ComponentModule}. A message may have a body,
  * which represents a message's payload to be processed, and multiple attachments.
  * Both body and attachments are {@link JsonObject}s.
  *
  * <p>
  *
- * A {@link Component} may retrieve a value from {@link Message}'s body by a name,
+ * A {@link ComponentModule} may retrieve a value from {@link Message}'s body by a name,
  * as shown in the following example.
  *
  * <pre>

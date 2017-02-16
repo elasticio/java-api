@@ -6,8 +6,8 @@ import javax.json.JsonObject;
 import java.io.Serializable;
 
 /**
- * Represents parameters for a {@link Component} execution passed
- * to {@link Component#execute(ExecutionParameters)}.
+ * Represents parameters for a {@link ComponentModule} execution passed
+ * to {@link ComponentModule#execute(ExecutionParameters)}.
  */
 public final class ExecutionParameters implements Serializable {
 

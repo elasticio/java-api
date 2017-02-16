@@ -41,7 +41,7 @@ import javax.json.JsonObject;
  * <pre>
  * <code>
  *
- * public class EchoComponent implements Component {
+ * public class EchoComponent implements Module {
  *
  *
  *    &#064;Override
@@ -78,7 +78,7 @@ import javax.json.JsonObject;
  * @see Message
  * @see EventEmitter
  */
-public interface Component {
+public interface Module {
 
     /**
      * Executes this component with the given {@link ExecutionParameters}.

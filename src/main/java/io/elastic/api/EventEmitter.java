@@ -6,13 +6,13 @@ import org.slf4j.LoggerFactory;
 import javax.json.JsonObject;
 
 /**
- * Used by a {@link Component} to communicate with the elastic.io runtime.
+ * Used by a {@link ComponentModule} to communicate with the elastic.io runtime.
  * 
  * The implementation of this class has been inspired by the <a
  * href="http://nodejs.org/api/events.html" target="_blank">Node.js
  * EventEmitter</a> class.
  * 
- * @see Component
+ * @see ComponentModule
  */
 public final class EventEmitter {
     private static final Logger logger = LoggerFactory.getLogger(EventEmitter.class);
