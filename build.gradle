@@ -7,11 +7,11 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 group = 'io.elastic'
-version = '0.0.8-SNAPSHOT'
+version = '2.0.0-SNAPSHOT'
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
-sourceCompatibility = 1.6
-targetCompatibility = 1.6
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 signing {
     required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
@@ -20,10 +20,11 @@ signing {
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
-    compile "com.google.code.gson:gson:2.2.4"
+    compile "org.glassfish:javax.json:1.0.4"
     compile "ch.qos.logback:logback-classic:1.1.2"
     testRuntime "org.codehaus.groovy:groovy-all:2.0.5"
     testCompile "org.spockframework:spock-core:0.7-groovy-2.0"

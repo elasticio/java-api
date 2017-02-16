@@ -1,7 +1,8 @@
 package io.elastic.api
 
-import com.google.gson.JsonObject
 import spock.lang.Specification
+
+import javax.json.Json
 
 class EventEmitterSpec extends Specification {
 
@@ -10,6 +11,7 @@ class EventEmitterSpec extends Specification {
     def snapshotCallback = Mock(EventEmitter.Callback)
     def reboundCallback = Mock(EventEmitter.Callback)
     def updateKeysCallback = Mock(EventEmitter.Callback)
+    def httpReplyCallback = Mock(EventEmitter.Callback)
 
     def emitter
 
@@ -20,6 +22,7 @@ class EventEmitterSpec extends Specification {
                 .onSnapshot(snapshotCallback)
                 .onRebound(reboundCallback)
                 .onUpdateKeys(updateKeysCallback)
+                .onHttpReplyCallback(httpReplyCallback)
                 .build()
     }
 
@@ -41,10 +44,9 @@ class EventEmitterSpec extends Specification {
 
     def "parse JSON object from #input results in #result"() {
         
-        def snapshot = new JsonObject()
+        def snapshot = Json.createObjectBuilder().add("value", "I am snapshot").build()
          
         when:
-        snapshot.addProperty("value", "I am snapshot")
         emitter.emitSnapshot(snapshot);
 
         then:
@@ -88,10 +90,11 @@ class EventEmitterSpec extends Specification {
 
     def "should emit updateAccessToken event" () {
         setup:
-        def obj = new JsonObject()
-        obj.addProperty("access_token", "foo_bar")
-        obj.addProperty("refresh_token", "baz_barney")
-        obj.addProperty("expires_in", "3600")
+        def obj = Json.createObjectBuilder()
+                .add("access_token", "foo_bar")
+                .add("refresh_token", "baz_barney")
+                .add("expires_in", "3600")
+                .build()
 
         when:
         emitter.emitUpdateKeys(obj);
@@ -102,5 +105,25 @@ class EventEmitterSpec extends Specification {
         0 * errorCallback.receive(_)
         0 * reboundCallback.receive(_)
         1 * updateKeysCallback.receive(obj)
+    }
+
+    def "should emit httpReply event" () {
+        setup:
+        def reply = new HttpReply.Builder()
+                .content(new ByteArrayInputStream("hello".getBytes()))
+                .status(HttpReply.Status.OK)
+                .header('X-Powered-By', 'elastic.io')
+                .build()
+
+        when:
+        emitter.emitHttpReply(reply);
+
+        then:
+        0 * snapshotCallback.receive(_)
+        0 * dataCallback.receive(_)
+        0 * errorCallback.receive(_)
+        0 * reboundCallback.receive(_)
+        0 * updateKeysCallback.receive(_)
+        1 * httpReplyCallback.receive(reply)
     }
 }

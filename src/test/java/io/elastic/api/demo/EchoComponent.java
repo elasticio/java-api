@@ -1,25 +1,21 @@
 package io.elastic.api.demo;
 
-import com.google.gson.JsonObject;
-
-import io.elastic.api.Component;
-import io.elastic.api.EventEmitter;
+import io.elastic.api.Module;
 import io.elastic.api.ExecutionParameters;
 import io.elastic.api.Message;
 
-public class EchoComponent extends Component {
+import javax.json.Json;
+import javax.json.JsonObject;
 
-    public EchoComponent(EventEmitter eventEmitter) {
-        super(eventEmitter);
-    }
+public class EchoComponent implements Module {
 
-    @Override
     public void execute(ExecutionParameters parameters) {
 
-        final JsonObject snapshot = new JsonObject();
-        snapshot.add("echo", parameters.getSnapshot());
+        final JsonObject snapshot = Json.createObjectBuilder()
+                .add("echo", parameters.getSnapshot())
+                .build();
 
-        getEventEmitter()
+        parameters.getEventEmitter()
                 .emitSnapshot(snapshot)
                 .emitData(echoMessage(parameters));
     }
@@ -28,9 +24,10 @@ public class EchoComponent extends Component {
 
         final Message msg = parameters.getMessage();
 
-        final JsonObject body = new JsonObject();
-        body.add("echo", msg.getBody());
-        body.add("config", parameters.getConfiguration());
+        final JsonObject body = Json.createObjectBuilder()
+                .add("echo", msg.getBody())
+                .add("config", parameters.getConfiguration())
+                .build();
 
         return new Message.Builder()
                 .body(body)

@@ -1,10 +1,10 @@
 package io.elastic.api;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
-import java.lang.reflect.Type;
+import javax.json.*;
+import java.io.ByteArrayInputStream;
+import java.io.StringWriter;
+import java.util.concurrent.Callable;
 
 /**
  * JSON utilities.
@@ -21,21 +21,64 @@ public final class JSON {
      * @param input string to parse
      * @return JsonObject
      */
-    public static JsonObject parse(String input) {
+    public static JsonObject parseObject(String input) {
+        final JsonReader reader = createReader(input);
+
+        if (reader == null) {
+            return null;
+        }
+
+        try {
+            return reader.readObject();
+        } finally {
+            reader.close();
+        }
+    }
+
+    /**
+     * Parses a String into a {@link JsonArray}.
+     *
+     * @param input string to parse
+     * @return JsonArray
+     */
+    public static JsonArray parseArray(String input) {
+        final JsonReader reader = createReader(input);
+
+        if (reader == null) {
+            return null;
+        }
+
+        try {
+            return reader.readArray();
+        } finally {
+            reader.close();
+        }
+    }
+
+    private static <T> JsonReader createReader(final String input) {
         if (input == null) {
             return null;
         }
 
-        final Gson gson = new Gson();
+        final JsonReader reader = Json.createReader(
+                new ByteArrayInputStream(input.getBytes()));
 
-        final JsonElement json = gson.fromJson(input, (Type) JsonObject.class);
+        return reader;
+    }
 
+    /**
+     * Writes a {@link JsonObject} into a String and returns it.
+     *
+     * @param object object to stringify
+     * @return String representation of the object
+     */
+    public static String stringify(final JsonObject object) {
+        final StringWriter writer = new StringWriter();
 
-        if (!json.isJsonObject()) {
-            throw new IllegalArgumentException(String.format("%s cannot be parsed to a JsonObject", input));
-        }
+        final JsonWriter jsonWriter = Json.createWriter(writer);
+        jsonWriter.writeObject(object);
+        jsonWriter.close();
 
-        return (JsonObject) json;
-
+        return writer.toString();
     }
 }

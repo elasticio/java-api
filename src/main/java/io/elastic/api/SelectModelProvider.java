@@ -1,7 +1,7 @@
 package io.elastic.api;
 
-import com.google.gson.JsonObject;
 
+import javax.json.JsonObject;
 
 /**
  * Interface to be implemented by components which want to provide select model.

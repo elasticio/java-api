@@ -1,12 +1,13 @@
 package io.elastic.api;
 
-import com.google.gson.JsonObject;
 
+import javax.json.Json;
+import javax.json.JsonObject;
 import java.io.Serializable;
 
 /**
- * Represents parameters for a {@link Component} execution passed
- * to {@link Executor#execute(ExecutionParameters)}.
+ * Represents parameters for a {@link Module} execution passed
+ * to {@link Module#execute(ExecutionParameters)}.
  */
 public final class ExecutionParameters implements Serializable {
 
@@ -15,11 +16,16 @@ public final class ExecutionParameters implements Serializable {
     private final Message message;
     private final JsonObject configuration;
     private final JsonObject snapshot;
+    private final EventEmitter eventEmitter;
 
-    private ExecutionParameters(Message message, JsonObject configuration, JsonObject snapshot) {
+    private ExecutionParameters(final Message message,
+                                final EventEmitter eventEmitter,
+                                final JsonObject configuration,
+                                final JsonObject snapshot) {
         this.message = message;
         this.configuration = configuration;
         this.snapshot = snapshot;
+        this.eventEmitter = eventEmitter;
     }
 
     /**
@@ -49,6 +55,10 @@ public final class ExecutionParameters implements Serializable {
         return snapshot;
     }
 
+    public EventEmitter getEventEmitter() {
+        return eventEmitter;
+    }
+
     /**
      * Used to build {@link ExecutionParameters} instances.
      */
@@ -56,21 +66,27 @@ public final class ExecutionParameters implements Serializable {
         private final Message message;
         private JsonObject configuration;
         private JsonObject snapshot;
+        private EventEmitter eventEmitter;
 
 
         /**
          * Creates a {@link Builder} instance.
          *
          * @param message non-null message for the component
+         * @param eventEmitter non-null EventEmitter
          */
-        public Builder(Message message) {
+        public Builder(final Message message, final EventEmitter eventEmitter) {
             if (message == null) {
                 throw new IllegalArgumentException("Message is required");
             }
+            if (eventEmitter == null) {
+                throw new IllegalArgumentException("EventEmitter is required");
+            }
 
             this.message = message;
-            this.configuration = new JsonObject();
-            this.snapshot = new JsonObject();
+            this.eventEmitter = eventEmitter;
+            this.configuration = Json.createObjectBuilder().build();
+            this.snapshot = Json.createObjectBuilder().build();
         }
 
         /**
@@ -111,7 +127,7 @@ public final class ExecutionParameters implements Serializable {
                 throw new IllegalStateException("Snapshot may not be null");
             }
 
-            return new ExecutionParameters(message, configuration, snapshot);
+            return new ExecutionParameters(message, eventEmitter, configuration, snapshot);
         }
     }
 
@@ -121,6 +137,7 @@ public final class ExecutionParameters implements Serializable {
                 "message=" + message +
                 ", configuration=" + configuration +
                 ", snapshot=" + snapshot +
+                ", eventEmitter=" + eventEmitter +
                 '}';
     }
 }

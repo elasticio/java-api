@@ -1,17 +1,18 @@
 package io.elastic.api;
 
-import com.google.gson.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.json.JsonObject;
+
 /**
- * Used by a {@link Component} to communicate with the elastic.io runtime.
+ * Used by a {@link Module} to communicate with the elastic.io runtime.
  * 
  * The implementation of this class has been inspired by the <a
  * href="http://nodejs.org/api/events.html" target="_blank">Node.js
  * EventEmitter</a> class.
  * 
- * @see Component
+ * @see Module
  */
 public final class EventEmitter {
     private static final Logger logger = LoggerFactory.getLogger(EventEmitter.class);
@@ -21,17 +22,20 @@ public final class EventEmitter {
     private Callback snapshotCallback;
     private Callback reboundCallback;
     private Callback updateKeysCallback;
+    private Callback httpReplyCallback;
 
     private EventEmitter(Callback errorCallback,
                          Callback dataCallback,
                          Callback snapshotCallback,
                          Callback reboundCallback,
-                         Callback updateKeysCallback) {
+                         Callback updateKeysCallback,
+                         Callback httpReplyCallback) {
         this.errorCallback = errorCallback;
         this.dataCallback = dataCallback;
         this.snapshotCallback = snapshotCallback;
         this.reboundCallback = reboundCallback;
         this.updateKeysCallback = updateKeysCallback;
+        this.httpReplyCallback = httpReplyCallback;
     }
 
     /**
@@ -99,6 +103,18 @@ public final class EventEmitter {
         return emitOptional(updateKeysCallback, "updateKeys", object);
     }
 
+    /**
+     * Emits the httpReply event. This method is typically used to emit a HTTP reply in real-time flows.
+     *
+     * @param reply
+     *            HTTP reply
+     * @return this instance
+     */
+    public EventEmitter emitHttpReply(final HttpReply reply) {
+
+        return emitOptional(httpReplyCallback, "httpReply", reply);
+    }
+
     private EventEmitter emit(Callback callback, Object value) {
         callback.receive(value);
 
@@ -117,14 +133,12 @@ public final class EventEmitter {
     }
 
     /**
-     * This interface defines a callback to be used by {@link Executor} to pass
-     * errors, data and snapshots to its callee.
+     * This interface defines a callback to pass errors, data and snapshots to its callee.
      */
     public interface Callback {
 
         /**
-         * Invoked by {@link Executor} to pass errors, data and snapshots
-         * asynchronously.
+         * Invoked to pass errors, data and snapshots asynchronously.
          * 
          * @param data
          *            data to be passed
@@ -141,6 +155,7 @@ public final class EventEmitter {
         private Callback snapshotCallback;
         private Callback reboundCallback;
         private Callback updateKeysCallback;
+        private Callback httpReplyCallback;
 
         public Builder() {
 
@@ -212,6 +227,21 @@ public final class EventEmitter {
 
             return this;
         }
+
+        /**
+         * Adds 'httpReply' {@link Callback}.
+         *
+         * @since 2.0
+         *
+         * @param callback
+         *            callback invoked on httpReply event
+         * @return this instance
+         */
+        public Builder onHttpReplyCallback(Callback callback) {
+            this.httpReplyCallback = callback;
+
+            return this;
+        }
         
         /**
          * Builds an {@link EventEmitter} instance and returns it.
@@ -235,8 +265,18 @@ public final class EventEmitter {
             if(this.reboundCallback == null) {
                 throw new IllegalStateException("'onRebound' callback is required");
             }
+
+            if(this.httpReplyCallback == null) {
+                throw new IllegalStateException("'onHttpReplyCallback' callback is required");
+            }
             
-            return new EventEmitter(errorCallback, dataCallback, snapshotCallback, reboundCallback, updateKeysCallback);
+            return new EventEmitter(
+                    errorCallback,
+                    dataCallback,
+                    snapshotCallback,
+                    reboundCallback,
+                    updateKeysCallback,
+                    httpReplyCallback);
         }
     }
 

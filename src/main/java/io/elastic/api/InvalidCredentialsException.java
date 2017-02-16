@@ -1,7 +1,9 @@
 package io.elastic.api;
 
+import javax.json.JsonObject;
+
 /**
- * Thrown by {@link CredentialsVerifier#verify(com.google.gson.JsonObject)}
+ * Thrown by {@link CredentialsVerifier#verify(JsonObject)}
  * when authentication credentials are invalid.
  */
 public class InvalidCredentialsException extends Exception {
