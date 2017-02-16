@@ -1,13 +1,13 @@
 package io.elastic.api.demo;
 
-import io.elastic.api.ComponentModule;
+import io.elastic.api.Module;
 import io.elastic.api.ExecutionParameters;
 import io.elastic.api.Message;
 
 import javax.json.Json;
 import javax.json.JsonObject;
 
-public class EchoComponent implements ComponentModule {
+public class EchoComponent implements Module {
 
     public void execute(ExecutionParameters parameters) {
 
