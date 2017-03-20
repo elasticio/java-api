@@ -120,14 +120,23 @@ public class Message implements Serializable {
         return attachments;
     }
 
-    @Override
-    public String toString() {
-        final JsonObject json = Json.createObjectBuilder()
+    /**
+     * Returns this message as {@link JsonObject}.
+     *
+     * @return message as JSON object
+     */
+    public JsonObject toJsonObject() {
+        return Json.createObjectBuilder()
                 .add("id", id.toString())
                 .add("headers", headers)
                 .add("body", body)
                 .add("attachments", attachments)
                 .build();
+    }
+
+    @Override
+    public String toString() {
+        final JsonObject json = toJsonObject();
         final StringWriter writer = new StringWriter();
         final JsonWriter jsonWriter = Json.createWriter(writer);
         jsonWriter.writeObject(json);
