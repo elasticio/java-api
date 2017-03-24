@@ -20,7 +20,7 @@ import java.util.UUID;
  *
  * <pre>
  * {@code
- *    JsonArray orders = message.getBody().orders("orders");
+ *    JsonArray orders = message.getBody().getJsonArray("orders");
  * }
  * </pre>
  *
@@ -44,10 +44,17 @@ public class Message implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public static final String PROPERTY_ID = "id";
+    public static final String PROPERTY_BODY = "body";
+    public static final String PROPERTY_HEADERS = "headers";
+    public static final String PROPERTY_ATTACHMENTS = "attachments";
+    public static final String PROPERTY_PASSTHROUGH = "passthrough";
+
     private UUID id;
     private JsonObject headers;
     private JsonObject body;
     private JsonObject attachments;
+    private JsonObject passthrough;
 
     /**
      * Creates a message with headers, body and attachments.
@@ -56,11 +63,13 @@ public class Message implements Serializable {
      * @param headers     headers of the message
      * @param body        body of the message
      * @param attachments attachments of the message
+     * @param passthrough passthrough of the message
      */
     private Message(final UUID id,
                     final JsonObject headers,
                     final JsonObject body,
-                    final JsonObject attachments) {
+                    final JsonObject attachments,
+                    final JsonObject passthrough) {
 
         if (id == null) {
             throw new IllegalArgumentException("Message id must not be null");
@@ -78,10 +87,15 @@ public class Message implements Serializable {
             throw new IllegalArgumentException("Message attachments must not be null");
         }
 
+        if (passthrough == null) {
+            throw new IllegalArgumentException("Message passthrough must not be null");
+        }
+
         this.id = id;
         this.headers = headers;
         this.body = body;
         this.attachments = attachments;
+        this.passthrough = passthrough;
     }
 
     /**
@@ -121,16 +135,26 @@ public class Message implements Serializable {
     }
 
     /**
+     * Returns message passthrough.
+     *
+     * @return passthrough
+     */
+    public JsonObject getPassthrough() {
+        return passthrough;
+    }
+
+    /**
      * Returns this message as {@link JsonObject}.
      *
      * @return message as JSON object
      */
     public JsonObject toJsonObject() {
         return Json.createObjectBuilder()
-                .add("id", id.toString())
-                .add("headers", headers)
-                .add("body", body)
-                .add("attachments", attachments)
+                .add(PROPERTY_ID, id.toString())
+                .add(PROPERTY_HEADERS, headers)
+                .add(PROPERTY_BODY, body)
+                .add(PROPERTY_ATTACHMENTS, attachments)
+                .add(PROPERTY_PASSTHROUGH, passthrough)
                 .build();
     }
 
@@ -153,6 +177,7 @@ public class Message implements Serializable {
         private JsonObject headers;
         private JsonObject body;
         private JsonObject attachments;
+        private JsonObject passthrough;
 
         /**
          * Default constructor.
@@ -162,6 +187,7 @@ public class Message implements Serializable {
             this.headers = Json.createObjectBuilder().build();
             this.body = Json.createObjectBuilder().build();
             this.attachments = Json.createObjectBuilder().build();
+            this.passthrough = Json.createObjectBuilder().build();
         }
 
         /**
@@ -170,7 +196,7 @@ public class Message implements Serializable {
          * @param id id for the message
          * @return same builder instance
          */
-        public Builder id(UUID id) {
+        public Builder id(final UUID id) {
 
             this.id = id;
 
@@ -183,7 +209,7 @@ public class Message implements Serializable {
          * @param headers headers for the message
          * @return same builder instance
          */
-        public Builder headers(JsonObject headers) {
+        public Builder headers(final JsonObject headers) {
 
             this.headers = headers;
 
@@ -196,7 +222,7 @@ public class Message implements Serializable {
          * @param body body for the message
          * @return same builder instance
          */
-        public Builder body(JsonObject body) {
+        public Builder body(final JsonObject body) {
 
             this.body = body;
 
@@ -209,8 +235,20 @@ public class Message implements Serializable {
          * @param attachments attachments for the message
          * @return same builder instance
          */
-        public Builder attachments(JsonObject attachments) {
+        public Builder attachments(final JsonObject attachments) {
             this.attachments = attachments;
+
+            return this;
+        }
+
+        /**
+         * Adds passthrough to build message with.
+         *
+         * @param passthrough passthrough for the message
+         * @return same builder instance
+         */
+        public Builder passthrough(final JsonObject passthrough) {
+            this.passthrough = passthrough;
 
             return this;
         }
@@ -221,7 +259,7 @@ public class Message implements Serializable {
          * @return Message
          */
         public Message build() {
-            return new Message(this.id, this.headers, this.body, this.attachments);
+            return new Message(this.id, this.headers, this.body, this.attachments, this.passthrough);
         }
     }
 }
