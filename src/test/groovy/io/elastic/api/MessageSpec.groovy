@@ -42,6 +42,15 @@ class MessageSpec extends Specification {
         e.message == "Message attachments must not be null"
     }
 
+    def "throw exception if passthrough null"() {
+        when:
+        new Message.Builder().passthrough(null).build()
+
+        then:
+        def e = thrown(IllegalArgumentException)
+        e.message == "Message passthrough must not be null"
+    }
+
     def "build message successfully"() {
         setup:
         def body = Json.createObjectBuilder()
@@ -53,11 +62,15 @@ class MessageSpec extends Specification {
         def attachments = Json.createObjectBuilder()
                 .add("logo.png", "http://acmer.org/img/logo.png")
                 .build()
+        def passthrough = Json.createObjectBuilder()
+                .add("step_1", Json.createObjectBuilder().add("msg", "Lorem ipsum").build())
+                .build()
 
         def msg = new Message.Builder()
                 .headers(headers)
                 .body(body)
                 .attachments(attachments)
+                .passthrough(passthrough)
                 .build()
 
         expect:
@@ -65,5 +78,6 @@ class MessageSpec extends Specification {
         msg.getBody().toString() == '{"message":"hello world!"}'
         msg.getHeaders().toString() == '{"x-io-rate-limit":60}'
         msg.getAttachments().toString() == '{"logo.png":"http://acmer.org/img/logo.png"}'
+        msg.getPassthrough().toString() == '{"step_1":{"msg":"Lorem ipsum"}}'
     }
 }
