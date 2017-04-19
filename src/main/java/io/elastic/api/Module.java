@@ -90,11 +90,10 @@ public interface Module {
     /**
      * Used to initialize the component on flow start. For example, a webhook trigger can subscribe a webhook url
      * to receive events from a target API inside this method. The subscription data, such as ID, can be returned
-     * from this method as JSON object for persistence in the platform. Once <i>shutdown</i> method is
-     * supported, the persisted JSON will be passed as argument to <i>shutdown</i> method where the subscription
-     * can be canceled on flow stop.
+     * from this method as JSON object for persistence in the platform. The persisted JSON will be passed to
+     * {@link #shutdown(JsonObject, JsonObject)} method where the subscription can be canceled on flow stop.
      *
-     * @since 2.0
+     * @since 2.0.0
      *
      * @param configuration component's configuration
      * @return JSON object to be persisted or null
@@ -107,11 +106,26 @@ public interface Module {
      * Used to initialize a component before message processing. For polling flows this method
      * is called once per scheduled execution. For real-time flows this method is called once on first execution.
      *
-     * @since 2.0
+     * @since 2.0.0
      *
      * @param configuration component's configuration
      */
     default void init(final JsonObject configuration) {
+        // default implementation does nothing
+    }
+
+
+    /**
+     * Used to shutdown a component gracefully before its process is killed. This method is invoked when the flow the
+     * component is used in is inactivated. It is considered as the counterpart of {@link #startup(JsonObject)}.
+     * For example, this method may be used to cancel a webhook subscription on flow stop.
+     *
+     * @since 2.2.0
+     *
+     * @param configuration component's configuration
+     * @param state component's state returned by {@link #startup(JsonObject)} method
+     */
+    default void shutdown(final JsonObject configuration, final JsonObject state) {
         // default implementation does nothing
     }
 }
