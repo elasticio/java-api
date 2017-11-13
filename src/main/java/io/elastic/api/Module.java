@@ -94,6 +94,7 @@ public interface Module {
      * {@link #shutdown(ShutdownParameters)} method where the subscription can be canceled on flow stop.
      *
      * @param parameters parameters to startup the module with
+     * @return state to be persisted
      * @since 2.0.0
      */
     default JsonObject startup(final StartupParameters parameters) {

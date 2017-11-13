@@ -30,7 +30,7 @@ public final class ShutdownParameters implements Serializable {
     /**
      * Returns module's state, created in {@link Module#startup(StartupParameters)}
      *
-     * @return
+     * @return state
      */
     public JsonObject getState() {
         return state;
