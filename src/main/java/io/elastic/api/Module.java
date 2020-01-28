@@ -104,6 +104,18 @@ public interface Module {
     }
 
     /**
+     * Used to initialize the component on flow shutdown.
+     *
+     * @since 2.2.0
+     *
+     * @param configuration component's configuration
+     * @return JSON object to be persisted or null
+     */
+    default JsonObject shutdown(final JsonObject configuration) {
+        return Json.createObjectBuilder().build();
+    }
+
+    /**
      * Used to initialize a component before message processing. For polling flows this method
      * is called once per scheduled execution. For real-time flows this method is called once on first execution.
      *
