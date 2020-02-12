@@ -1,0 +1,14 @@
+version: 2
+jobs:
+  build:
+    
+    working_directory: ~/java-api
+
+    steps:
+
+      - checkout
+      
+      - run: export TERM=${TERM:-dumb} && ./gradlew build --refresh-dependencies uploadArchives -PsonatypeUsername=$SONATYPE_USERNAME -PsonatypePassword=$SONATYPE_PASSWORD
+      
+      - store_test_results:
+          path: build/reports
