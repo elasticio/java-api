@@ -2,15 +2,15 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/openjdk:11.0.3-jdk-stretch
+      - image: circleci/openjdk:8-jdk
+
+    working_directory: ~/java-api
+
+    environment:
+      TERM: dumb
+
     steps:
       - checkout
       - run: export TERM=${TERM:-dumb} && ./gradlew build --refresh-dependencies uploadArchives -PsonatypeUsername=$SONATYPE_USERNAME -PsonatypePassword=$SONATYPE_PASSWORD
       - store_test_results:
           path: build/reports
-
-workflows:
-  version: 2
-  build_test_upload:
-    jobs:
-      - build
