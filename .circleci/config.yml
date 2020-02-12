@@ -4,6 +4,8 @@ jobs:
     
     working_directory: ~/java-api
 
+    docker:
+
     steps:
 
       - checkout
