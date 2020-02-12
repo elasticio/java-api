@@ -5,6 +5,7 @@ jobs:
     working_directory: ~/java-api
 
     docker:
+      - image: circleci/openjdk:8
 
     steps:
 
